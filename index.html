@@ -354,10 +354,12 @@
     text-align: center; line-height: 1.3; padding: 0 8px;
   }
   .feat-circle .fc-spoke.fc-active .fc-icon-card {
-    background: color-mix(in srgb, var(--accent) 35%, transparent);
-    border-color: var(--accent-lt);
-    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 20%, transparent), 0 20px 60px rgba(0,0,0,.4);
+    background: rgba(255,255,255,0.95);
+    border-color: #fff;
+    box-shadow: 0 0 0 4px rgba(255,255,255,0.3), 0 20px 60px rgba(0,0,0,.4);
   }
+  .feat-circle .fc-spoke.fc-active .fc-icon-card svg { stroke: var(--accent); }
+  .feat-circle .fc-spoke.fc-active .fc-icon-card span { color: var(--accent); }
   .feat-arrow { position: absolute; top: 50%; transform: translateY(-50%); z-index: 10; }
   .feat-arrow.feat-arrow--next { right: 5%; }
   .feat-arrow.feat-arrow--prev { left: 5%; }
@@ -568,13 +570,14 @@
 
     /* ══ FEATURES — MOBILE ONLY ══════════════════════════════════ */
     .feat-slider {
-      height: 430px;
+      height: 350px;
       min-height: unset;
       flex-direction: column;
       align-items: center;
-      background: var(--accent);   /* single solid orange — no split */
+      background: var(--accent);
       overflow: hidden;
-      padding-bottom: 80px;
+      padding-bottom: 60px;
+      position: relative;
     }
     .feat-slider::before, .feat-slider::after { display: none; }
 
@@ -583,24 +586,29 @@
       background: transparent;
       position: relative;
       width: 100%;
-      min-height: 220px;
-      flex: unset;
+      height: 220px;
+      min-height: unset;
+      flex: none;
       order: 1; /* text FIRST (top) */
     }
 
     /* Circle — in-flow at bottom */
     .feat-circle {
       order: 2; /* circle SECOND (bottom) */
-      position: relative;
-      top: auto; left: auto;
+      position: relative !important;
+      top: auto !important;
+      left: auto !important;
+      bottom: auto !important;
       --rotate: 0deg;
-      transform: rotate(var(--rotate));
-      width: 300px; height: 300px;
-      margin: 8px auto 24px;
+      --circle-rotate: 0deg;
+      transform: translateX(0) rotate(var(--rotate)) !important;
+      width: 260px; height: 260px;
+      margin: 0 auto;
       flex-shrink: 0;
       z-index: 5;
-      transition: transform 1.4s cubic-bezier(0.5, 0, 0.1, 1);
+      transition: transform 1.2s cubic-bezier(0.5, 0, 0.1, 1);
       pointer-events: none;
+      display: block !important;
     }
 
     /* Icon cards — counter-rotate so text always stays upright */
@@ -613,7 +621,7 @@
       pointer-events: auto;
       /* negate spoke angle AND circle rotation so label stays upright */
       --card-rotate: calc((var(--i) * -60deg) - var(--circle-rotate, 0deg));
-      transition: transform 1.4s cubic-bezier(0.5, 0, 0.1, 1), background 0.3s, border-color 0.3s, box-shadow 0.3s;
+      transition: transform 1.2s cubic-bezier(0.5, 0, 0.1, 1), background 0.3s, border-color 0.3s, box-shadow 0.3s;
     }
     .feat-circle .fc-spoke .fc-icon-card svg {
       width: 26px; height: 26px;
@@ -627,14 +635,14 @@
       line-height: 1.3;
     }
 
-    /* Active spoke */
+    /* Active spoke — white highlight */
     .feat-circle .fc-spoke.fc-active .fc-icon-card {
-      background: rgba(255,255,255,.95);
-      border-color: #fff;
-      box-shadow: 0 0 0 3px rgba(255,255,255,.3), 0 10px 28px rgba(0,0,0,.25);
+      background: rgba(255,255,255,.95) !important;
+      border-color: #fff !important;
+      box-shadow: 0 0 0 3px rgba(255,255,255,.3), 0 10px 28px rgba(0,0,0,.25) !important;
     }
-    .feat-circle .fc-spoke.fc-active .fc-icon-card svg { stroke: var(--accent); }
-    .feat-circle .fc-spoke.fc-active .fc-icon-card span { color: var(--accent); }
+    .feat-circle .fc-spoke.fc-active .fc-icon-card svg { stroke: var(--accent) !important; }
+    .feat-circle .fc-spoke.fc-active .fc-icon-card span { color: var(--accent) !important; }
 
     /* Central hub ring */
     .feat-circle::after {
@@ -677,10 +685,10 @@
       color: var(--accent);
     }
 
-    /* Arrows */
+    /* Arrows — positioned at bottom corners */
     .feat-arrow {
       top: auto;
-      bottom: 16px;
+      bottom: 12px;
       transform: none;
       z-index: 20;
     }
@@ -694,17 +702,17 @@
     }
     .feat-arrow button:hover { border-color: #fff; background: rgba(255,255,255,.2); }
 
-    /* Dots */
+    /* Dots — centred at very bottom */
     .feat-dots {
       position: absolute;
-      bottom: 16px;
+      bottom: 10px;
       left: 50%;
       transform: translateX(-50%);
       display: flex;
       justify-content: center;
-      gap: 8px;
+      gap: 5px;
       background: transparent;
-      width: 100%;
+      width: auto;
       z-index: 10;
     }
     .feat-dot { background: rgba(255,255,255,.35); }
@@ -1269,7 +1277,7 @@
     }
   }
 
-  // ── ROTATING CIRCLE CAROUSEL ──
+  // ── ROTATING CIRCLE CAROUSEL — DESKTOP & MOBILE (separate) ──
   (function() {
     const circle  = document.getElementById('featCircle');
     const spokes  = Array.from(circle.querySelectorAll('.fc-spoke'));
@@ -1278,6 +1286,14 @@
     const total   = items.length;
     let active    = 0;
     let rotate    = 0;
+
+    /* ── helpers ── */
+    function isMobile() { return window.innerWidth < 768; }
+
+    function applyRotation() {
+      circle.style.setProperty('--rotate', rotate + 'deg');
+      circle.style.setProperty('--circle-rotate', rotate + 'deg');
+    }
 
     function getTopSpokeIndex() {
       const norm = ((rotate % 360) + 360) % 360;
@@ -1293,32 +1309,6 @@
       if (top !== -1) spokes[top].classList.add('fc-active');
     }
 
-    updateActiveSpoke();
-
-    spokes.forEach((spoke) => {
-      spoke.querySelector('.fc-icon-card').addEventListener('click', () => {
-        const i = parseInt(spoke.style.getPropertyValue('--i'));
-        if (i !== active) {
-          let diff = (i - active + total) % total;
-          const dir = diff <= total / 2 ? 1 : -1;
-          goTo(i, dir);
-        }
-      });
-    });
-
-    items.forEach((_, i) => {
-      const d = document.createElement('button');
-      d.className = 'feat-dot' + (i === 0 ? ' active' : '');
-      d.setAttribute('aria-label', 'Go to feature ' + (i+1));
-      d.addEventListener('click', () => goTo(i, i > active ? 1 : -1));
-      dotsEl.appendChild(d);
-    });
-
-    function applyRotation() {
-      circle.style.setProperty('--rotate', rotate + 'deg');
-      circle.style.setProperty('--circle-rotate', rotate + 'deg');
-    }
-
     function goTo(idx, dir) {
       items[active].classList.remove('active');
       dotsEl.children[active].classList.remove('active');
@@ -1330,19 +1320,61 @@
       updateActiveSpoke();
     }
 
-    // Also re-apply on resize
-    window.addEventListener('resize', applyRotation);
+    /* ── build dots ── */
+    items.forEach((_, i) => {
+      const d = document.createElement('button');
+      d.className = 'feat-dot' + (i === 0 ? ' active' : '');
+      d.setAttribute('aria-label', 'Go to feature ' + (i + 1));
+      d.addEventListener('click', () => goTo(i, i > active ? 1 : -1));
+      dotsEl.appendChild(d);
+    });
 
+    /* ── initial state ── */
+    updateActiveSpoke();
+    applyRotation();
+
+    /* ── DESKTOP: spoke icon clicks ── */
+    spokes.forEach((spoke) => {
+      spoke.querySelector('.fc-icon-card').addEventListener('click', () => {
+        if (isMobile()) return; // mobile has its own handler below
+        const i = parseInt(spoke.style.getPropertyValue('--i'));
+        if (i !== active) {
+          let diff = (i - active + total) % total;
+          const dir = diff <= total / 2 ? 1 : -1;
+          goTo(i, dir);
+        }
+      });
+    });
+
+    /* ── MOBILE: spoke icon clicks (same logic, no guard needed as spokes are shared) ── */
+    // We use pointer events for all and decide in handler
+    spokes.forEach((spoke) => {
+      spoke.querySelector('.fc-icon-card').addEventListener('click', () => {
+        if (!isMobile()) return;
+        const i = parseInt(spoke.style.getPropertyValue('--i'));
+        if (i !== active) {
+          let diff = (i - active + total) % total;
+          const dir = diff <= total / 2 ? 1 : -1;
+          goTo(i, dir);
+        }
+      });
+    });
+
+    /* ── arrows ── */
     document.getElementById('featPrev').addEventListener('click', () => goTo(active - 1, -1));
     document.getElementById('featNext').addEventListener('click', () => goTo(active + 1, 1));
 
+    /* ── DESKTOP touch / swipe ── */
     let tx = 0;
     const slider = document.querySelector('.feat-slider');
-    slider.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, {passive:true});
+    slider.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
     slider.addEventListener('touchend', e => {
       const dx = e.changedTouches[0].clientX - tx;
       if (Math.abs(dx) > 50) goTo(active + (dx < 0 ? 1 : -1), dx < 0 ? 1 : -1);
-    }, {passive:true});
+    }, { passive: true });
+
+    /* ── MOBILE: re-apply rotation on resize so circle stays correct ── */
+    window.addEventListener('resize', applyRotation);
   })();
 
   function handleSubmit(btn) {
