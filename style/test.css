@@ -1,0 +1,3140 @@
+/* =============================================================
+   walgi-styles.css
+   Walgi Smart Home — All Styles
+
+   Table of Contents:
+   01. CSS Variables & Reset
+   02. Base Body & Typography
+   03. Navigation
+   04. Hero Section
+   05. Hero Right — Phone Mockup
+   06. Hero Bottom Strip
+   07. Marquee / Ticker
+   08. Shared Section Styles
+   09. Features Grid
+   10. Products List
+   11. How It Works
+   12. Early Access CTA
+   13. Footer
+   14. Dark Mode Overrides
+   15. Temperature Theme — Warm & Cool
+   16. Gate Overlay
+   17. Scroll Reveal Animation
+   18. Responsive / Mobile
+   ============================================================= */
+
+
+/* ─────────────────────────────────────────────
+   01. CSS VARIABLES & RESET
+   Global colour tokens used throughout.
+   Changing these affects the whole site.
+───────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --black: #0b0b0b;               /* Primary dark colour */
+  --white: #f4f3ef;               /* Primary light background */
+  --mid:   #5c5a57;               /* Secondary text / muted */
+  --grey:  #aeaca7;               /* Labels, placeholders */
+  --line:  rgba(11,11,11,0.1);    /* Subtle divider lines */
+}
+
+html { scroll-behavior: smooth; }
+
+
+/* ─────────────────────────────────────────────
+   02. BASE BODY
+───────────────────────────────────────────── */
+body {
+  background: var(--white);
+  color: var(--black);
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 300;
+  overflow-x: hidden;
+  transition: background .4s, color .4s; /* Smooth dark mode transition */
+}
+
+
+/* ─────────────────────────────────────────────
+   03. NAVIGATION
+   Fixed top bar with logo, launch tag, and CTA button.
+───────────────────────────────────────────── */
+
+/* Gate message pointer-events — always clickable above overlay */
+.gate-message { pointer-events: all !important; }
+
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.3rem 5vw;
+  background: var(--white);
+  border-bottom: 1px solid var(--line);
+}
+
+/* logo */
+.logo {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+.logo-box {
+  width: 160px;
+  height: 50px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Light mode logo — visible by default */
+.logo-img-light {
+  width: 200px;
+  height: 160px;
+  object-fit: contain;
+  display: block;   /* ← THIS is what makes it visible in light mode */
+}
+
+/* Dark mode logo — hidden by default */
+.logo-img-dark {
+  width: 200px;
+  height: 160px;
+  object-fit: contain;
+  display: none;   /* ← hidden until dark mode activates */
+}
+
+/* "Launching 2025" badge */
+.nav-tag {
+  font-size: .7rem; letter-spacing: .15em; text-transform: uppercase;
+  color: var(--grey); padding: .3rem .8rem; border: 1px solid var(--line);
+}
+
+/* "Join Waitlist" button */
+.nav-cta {
+  font-family: 'Epilogue', sans-serif; font-weight: 500;
+  font-size: .78rem; letter-spacing: .1em; text-transform: uppercase;
+  padding: .6rem 1.5rem; background: var(--black); color: var(--white);
+  border: 1px solid var(--black);
+  transition: background .22s, color .22s;
+}
+.nav-cta:hover { background: transparent; color: var(--black); }
+
+
+/* ─────────────────────────────────────────────
+   04. HERO SECTION
+   Full-viewport split layout:
+   Left = headline + description + buttons
+   Right = interactive phone mockup
+───────────────────────────────────────────── */
+.hero {
+  min-height: 100vh; padding-top: 76px; /* 76px = nav height */
+  display: grid; grid-template-rows: 1fr auto;
+  border-bottom: 1px solid var(--line);
+}
+
+.hero-main {
+  display: grid; grid-template-columns: 1fr 1fr;
+}
+
+.hero-left {
+  padding: 5rem 5vw 4rem;
+  border-right: 1px solid var(--line);
+  display: flex; flex-direction: column; justify-content: space-between;
+}
+
+/* "Now Launching in India" pill badge */
+.launch-pill {
+  display: inline-flex; align-items: center; gap: .55rem;
+  font-size: .7rem; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--black); border: 1px solid var(--black);
+  padding: .35rem .9rem; width: fit-content; margin-bottom: 3.5rem;
+}
+
+/* Pulsing dot inside the launch pill */
+.launch-dot {
+  width: 6px; height: 6px; background: var(--black);
+  border-radius: 50%; animation: blink 1.8s ease-in-out infinite;
+}
+
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
+
+/* Main headline — very large Bebas Neue */
+.hero-h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(4.5rem, 8.5vw, 10.5rem);
+  line-height: .9; letter-spacing: .01em;
+}
+
+/* Outlined (hollow) text variant for the headline */
+.hero-h1 .stroke { -webkit-text-stroke: 2px var(--black); color: transparent; }
+
+/* Bottom row of the hero left: description + buttons */
+.hero-foot {
+  padding-top: 3rem; display: flex;
+  justify-content: space-between; align-items: flex-end;
+}
+
+.hero-desc { max-width: 320px; color: var(--mid); font-size: .98rem; line-height: 1.72; }
+.hero-btns { display: flex; flex-direction: column; align-items: flex-end; gap: .85rem; }
+
+/* Filled primary button */
+.btn-fill {
+  background: var(--black); color: var(--white);
+  font-family: 'Epilogue', sans-serif; font-weight: 500;
+  font-size: .78rem; letter-spacing: .1em; text-transform: uppercase;
+  padding: .85rem 2rem; border: 1px solid var(--black);
+  transition: background .22s, color .22s;
+}
+.btn-fill:hover { background: transparent; color: var(--black); }
+
+/* Outlined ghost button */
+.btn-ghost {
+  background: transparent; color: var(--black);
+  font-family: 'Epilogue', sans-serif; font-weight: 500;
+  font-size: .78rem; letter-spacing: .1em; text-transform: uppercase;
+  padding: .85rem 2rem; border: 1px solid var(--black);
+  transition: background .22s, color .22s;
+}
+.btn-ghost:hover { background: var(--black); color: var(--white); }
+
+
+/* ─────────────────────────────────────────────
+   05. HERO RIGHT — PHONE MOCKUP
+   Contains the interactive Walgi app mockup card.
+   z-index: 50 — sits above the hero background images
+   but BELOW the gate overlay (z-index: 350).
+   The mockup itself is z-index: 400 so it stays
+   visible even when gate is closed.
+───────────────────────────────────────────── */
+.hero-right {
+  padding: 4rem;
+  display: flex; align-items: center; justify-content: right;
+  position: relative; overflow: hidden;
+  z-index: 50; /* Below gate overlay so gate covers it fully */
+}
+
+/* Remove the old dot-grid background pattern
+   (images replace it now) */
+.hero-right::before { display: none; }
+
+/* ── Day / Night background images ──
+   Both images are absolutely positioned and fill the panel.
+   JS toggles .hidden on each to switch between them. */
+.hero-bg-img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center;
+  transition: opacity .8s ease; /* Smooth crossfade */
+  z-index: 0;
+}
+
+/* Day image — visible by default */
+.hero-bg-day   { opacity: 1; }
+
+/* Night image — hidden by default, shown when lights off */
+.hero-bg-night { opacity: 0; }
+
+/* When body has dark-mode class — swap images */
+body.dark-mode .hero-bg-day   { opacity: 0; }
+body.dark-mode .hero-bg-night { opacity: 1; }
+
+/* Dark gradient overlay so the mockup card stays readable */
+.hero-bg-overlay {
+  position: absolute; inset: 0; z-index: 1;
+  background: linear-gradient(
+    135deg,
+    rgba(0,0,0,0.35) 0%,
+    rgba(0,0,0,0.15) 50%,
+    rgba(0,0,0,0.45) 100%
+  );
+  transition: background .8s ease;
+}
+
+/* Night overlay is darker */
+body.dark-mode .hero-bg-overlay {
+  background: linear-gradient(
+    135deg,
+    rgba(0,0,10,0.6) 0%,
+    rgba(0,0,20,0.4) 50%,
+    rgba(0,0,10,0.7) 100%
+  );
+}
+
+/* Phone card — dark background simulating a phone screen */
+.mockup {
+  position: relative; z-index: 400; /* Above gate overlay */
+  width: 280px;
+  background: var(--black);
+  color: var(--white);
+  border-radius: 28px;
+  padding: 1.5rem;
+  box-shadow: 0 40px 80px rgba(0,0,0,.35), 0 0 0 1px rgba(255,255,255,.06);
+  overflow: hidden; /* Keeps image within rounded corners */
+}
+
+/* ── Mockup background image ──
+   Absolutely positioned behind all UI elements.
+   A dark overlay ensures the white text stays readable. */
+.mockup-bg {
+  position: absolute; inset: 0;
+  z-index: 0; /* Behind everything inside mockup */
+  border-radius: 28px;
+  overflow: hidden;
+}
+
+.mockup-bg-img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0.45; /* Dim so UI tiles are readable */
+  transition: opacity .4s ease;
+}
+
+/* Gradient overlay — darker at bottom so energy bar stays readable */
+.mockup-bg-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(11,11,11,0.55) 0%,
+    rgba(11,11,11,0.3)  40%,
+    rgba(11,11,11,0.7)  100%
+  );
+}
+
+/* Make sure all mockup children sit above the background */
+.mockup > *:not(.mockup-bg) { position: relative; z-index: 1; }
+
+/* Top bar: app title + status indicator */
+.mockup-bar {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 1.2rem;
+}
+.mockup-title  { font-family: 'Epilogue', sans-serif; font-weight: 700; font-size: .82rem; letter-spacing: .04em; }
+.mockup-status { display: flex; align-items: center; gap: .35rem; font-size: .65rem; color: rgba(255,255,255,.45); }
+
+/* Green pulsing status dot */
+.mock-dot { width: 6px; height: 6px; background: #6fff9e; border-radius: 50%; animation: blink 2s ease-in-out infinite; }
+
+/* Phone notch bar at top */
+.phone-notch  { display: flex; justify-content: center; margin-bottom: 1rem; }
+.notch-bar    { width: 60px; height: 5px; background: rgba(255,255,255,.15); border-radius: 100px; }
+
+/* ── Temperature Ring ──
+   Circular dial showing current temperature.
+   Uses conic-gradient for the progress arc.
+   JS dynamically changes the gradient colour and percentage. */
+.temp-ring-wrap { display: flex; justify-content: center; margin-bottom: 1.2rem; flex-direction: column; align-items: center; }
+
+.temp-ring {
+  width: 120px; height: 120px; border-radius: 50%;
+  border: 2px solid rgba(255,255,255,.1);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  position: relative;
+  background: conic-gradient(rgba(255,255,255,.15) 0% 65%, rgba(255,255,255,.04) 65% 100%);
+  transition: background .6s ease, box-shadow .6s ease;
+}
+
+/* Inner circle mask — creates the donut ring effect */
+.temp-ring::after {
+  content: ''; position: absolute; inset: 8px;
+  border-radius: 50%; background: var(--black);
+}
+
+.temp-num { font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; line-height: 1; position: relative; z-index: 1; }
+.temp-lbl { font-size: .6rem; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.4); position: relative; z-index: 1; }
+
+/* Warm glow (orange) when temp ≥ 25° */
+.temp-ring.warm { box-shadow: 0 0 30px rgba(255,140,0,.35); }
+/* Cool glow (blue) when temp ≤ 20° */
+.temp-ring.cool { box-shadow: 0 0 30px rgba(69,212,255,.35); }
+
+/* ▲ / ▼ temperature adjustment arrows */
+.temp-arrow {
+  position: absolute; left: 50%; transform: translateX(-50%);
+  background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12);
+  color: rgba(255,255,255,.6); font-size: .55rem;
+  width: 22px; height: 22px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  z-index: 2;
+  transition: background .2s, color .2s;
+}
+.temp-arrow:hover { background: rgba(255,255,255,.2); color: white; }
+.temp-up { top: 6px; }   /* Up arrow position */
+.temp-dn { bottom: 6px; } /* Down arrow position */
+
+/* Small hint below ring */
+.temp-hint {
+  text-align: center; font-size: .58rem;
+  color: rgba(255,255,255,.25); letter-spacing: .06em;
+  margin-top: .3rem; margin-bottom: .2rem;
+}
+
+/* ── Device Tiles Grid ──
+   2-column grid of clickable control tiles.
+   Each tile shows an icon, name, and current state. */
+.device-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; margin-bottom: 1rem; }
+
+.d-tile {
+  background: rgba(255,255,255,.05); border-radius: 12px;
+  padding: .8rem .7rem; border: 1px solid rgba(255,255,255,.08);
+  transition: background .25s, border-color .25s, transform .15s;
+  user-select: none;
+}
+.d-tile:active { transform: scale(.95); } /* Press feedback */
+
+/* Active (on) state — brighter background */
+.d-tile.on { background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.18); }
+
+.d-icon  { font-size: 1.1rem; margin-bottom: .3rem; }
+.d-name  { font-size: .6rem; letter-spacing: .08em; text-transform: uppercase; color: rgba(255,255,255,.45); }
+.d-state { font-family: 'Epilogue', sans-serif; font-weight: 700; font-size: .72rem; margin-top: .15rem; }
+
+.d-tile.on .d-state      { color: #6fff9e; }            /* Green when on */
+.d-tile:not(.on) .d-state { color: rgba(255,255,255,.3); } /* Dim when off */
+
+/* Lights tile — yellow glow when on */
+.d-tile#tileLights.on { background: rgba(255,235,100,.15); border-color: rgba(255,235,100,.35); }
+.d-tile#tileLights.on .d-state { color: #ffe864; }
+
+/* AC tile — orange tint when in warm mode */
+.d-tile#tileAC.on.warm-ac { background: rgba(255,140,0,.12); border-color: rgba(255,140,0,.3); }
+.d-tile#tileAC.on.warm-ac .d-state { color: #ff9a3c; }
+
+/* AC tile — blue tint in cool mode */
+.d-tile#tileAC.on:not(.warm-ac) { background: rgba(69,212,255,.1); border-color: rgba(69,212,255,.25); }
+.d-tile#tileAC.on:not(.warm-ac) .d-state { color: #45d4ff; }
+
+/* Audio tile — purple when playing */
+.d-tile#tileAudio.on { background: rgba(180,159,255,.12); border-color: rgba(180,159,255,.3); }
+.d-tile#tileAudio.on .d-state { color: #b49fff; }
+
+/* ── Energy Bar ──
+   Shows daily energy savings with an animated progress bar. */
+.energy-block { background: rgba(255,255,255,.04); border-radius: 10px; padding: .75rem; border: 1px solid rgba(255,255,255,.07); }
+.e-head { display: flex; justify-content: space-between; font-size: .65rem; margin-bottom: .5rem; }
+.e-head span:first-child { color: rgba(255,255,255,.4); letter-spacing: .06em; }
+.e-head span:last-child  { color: #6fff9e; font-weight: 700; }
+.e-bar  { height: 4px; background: rgba(255,255,255,.08); border-radius: 100px; overflow: hidden; }
+
+/* Bar fill animates from 0 to 68% on load */
+.e-fill {
+  height: 100%; width: 68%;
+  background: linear-gradient(90deg, #6fff9e, #45d4ff);
+  border-radius: 100px;
+  animation: fillup 1.6s ease-out forwards;
+}
+@keyframes fillup { from { width: 0 } to { width: 68% } }
+
+/* Hint text at very bottom of mockup */
+.mockup-hint {
+  text-align: center; font-size: .58rem; letter-spacing: .08em;
+  color: rgba(255,255,255,.22); margin-top: .75rem;
+  text-transform: uppercase;
+}
+
+/* Floating stat cards positioned around the mockup */
+.float-card {
+  position: absolute; z-index: 50; /* Above hero-bg-overlay (z-index 1) */
+  background: var(--white); color: var(--black);
+  border: 1px solid var(--line);
+  border-radius: 14px; padding: .9rem 1.1rem;
+  box-shadow: 0 12px 32px rgba(0,0,0,.12);
+  font-size: .75rem;
+}
+.float-card.top-right { top: 10%; right: 4%; }
+.float-card.bot-left  { bottom: 12%; left: 4%; }
+.float-num { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; line-height: 1; }
+.float-lbl { color: var(--mid); font-size: .65rem; letter-spacing: .08em; text-transform: uppercase; margin-top: .1rem; }
+
+
+/* ─────────────────────────────────────────────
+   06. HERO BOTTOM STRIP
+   4-column info strip at the bottom of the hero.
+───────────────────────────────────────────── */
+.hero-strip {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  border-top: 1px solid var(--line);
+}
+.strip-cell {
+  padding: 1.4rem 2rem;
+  border-right: 1px solid var(--line);
+  display: flex; align-items: center; gap: .9rem;
+}
+.strip-cell:last-child { border-right: none; }
+.strip-icon       { font-size: 1.3rem; }
+.strip-text-label { font-size: .65rem; letter-spacing: .1em; text-transform: uppercase; color: var(--grey); }
+.strip-text-val   { font-family: 'Epilogue', sans-serif; font-weight: 700; font-size: .88rem; margin-top: .1rem; }
+
+
+/* ─────────────────────────────────────────────
+   07. MARQUEE / TICKER
+   Infinite scrolling text banner (black background).
+───────────────────────────────────────────── */
+.marquee-wrap  { background: var(--black); color: var(--white); padding: .95rem 0; overflow: hidden; }
+.marquee-track { display: flex; gap: 2.5rem; width: max-content; animation: marquee 16s linear infinite; }
+.m-item {
+  white-space: nowrap;
+  font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: .14em;
+  display: flex; align-items: center; gap: 2.5rem;
+}
+.m-item::after { content: '◆'; font-size: .4rem; opacity: .35; } /* Separator diamond */
+
+@keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+
+/* ─────────────────────────────────────────────
+   08. SHARED SECTION STYLES
+   Used across Features, Products, How It Works.
+───────────────────────────────────────────── */
+.sec { padding: 6rem 5vw; border-bottom: 1px solid var(--line); }
+.si  { max-width: 1280px; margin: 0 auto; } /* Inner container max-width */
+
+/* Small label above section titles e.g. "What Walgi Does" */
+.eyebrow {
+  font-size: .7rem; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--grey); display: flex; align-items: center; gap: .9rem; margin-bottom: 2.2rem;
+}
+.eyebrow::before { content: ''; width: 28px; height: 1px; background: var(--grey); } /* Decorative line */
+
+/* Large Bebas Neue section title */
+.sec-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.8rem, 5vw, 5.5rem); line-height: .93; letter-spacing: .02em; margin-bottom: 1rem; }
+.sec-sub   { color: var(--mid); font-size: 1rem; line-height: 1.72; max-width: 500px; }
+
+/* Outlined (hollow) text — used in section titles */
+.stroke { -webkit-text-stroke: 2px var(--black); color: transparent; }
+
+
+/* ─────────────────────────────────────────────
+   09. FEATURES GRID
+   3-column grid of feature cards.
+   Hovering inverts the card to black background.
+───────────────────────────────────────────── */
+.feat-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  border: 1px solid var(--line); margin-top: 4rem;
+}
+
+.feat-cell {
+  padding: 2.5rem;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  transition: background .28s, color .28s;
+  position: relative; overflow: hidden;
+}
+
+/* Remove right border on last column item */
+.feat-cell:nth-child(3n) { border-right: none; }
+/* Remove bottom border on last row items */
+.feat-cell:nth-last-child(-n+3) { border-bottom: none; }
+
+/* Hover: invert colours — white text on black background */
+.feat-cell:hover                 { background: var(--black); color: var(--white); }
+.feat-cell:hover .fc-num         { color: rgba(255,255,255,.38); }
+.feat-cell:hover .fc-sub         { color: rgba(255,255,255,.38); }
+.feat-cell:hover .fc-icon        { border-color: rgba(255,255,255,.12); background: rgba(255,255,255,.06); }
+
+.fc-num  { font-family: 'Bebas Neue', sans-serif; font-size: .85rem; color: var(--grey); letter-spacing: .1em; margin-bottom: 1.4rem; transition: color .28s; }
+.fc-icon { width: 46px; height: 46px; border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; font-size: 1.35rem; margin-bottom: 1.1rem; transition: border-color .28s, background .28s; }
+.feat-cell h3 { font-weight: 700; font-size: 1.05rem; margin-bottom: .55rem; }
+.fc-sub  { color: var(--mid); font-size: .87rem; line-height: 1.65; transition: color .28s; }
+
+
+/* ─────────────────────────────────────────────
+   10. PRODUCTS LIST
+   Horizontal row layout for each product.
+   Columns: number | name | description | arrow
+───────────────────────────────────────────── */
+.products-list { margin-top: 4rem; display: flex; flex-direction: column; border: 1px solid var(--line); }
+
+.prod-row {
+  display: grid; grid-template-columns: 80px 1fr 1fr auto;
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+  transition: background .25s;
+}
+.prod-row:last-child { border-bottom: none; }
+
+/* Hover: entire row flips to black */
+.prod-row:hover                       { background: var(--black); color: var(--white); }
+.prod-row:hover .pr-cat               { color: rgba(255,255,255,.4); }
+.prod-row:hover .pr-desc              { color: rgba(255,255,255,.4); }
+.prod-row:hover .pr-arrow             { border-color: rgba(255,255,255,.2); color: var(--white); }
+
+.pr-num   { padding: 1.8rem 1.5rem; text-align: center; font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; color: var(--grey); border-right: 1px solid var(--line); align-self: stretch; display: flex; align-items: center; justify-content: center; }
+.pr-info  { padding: 1.8rem 2rem; border-right: 1px solid var(--line); }
+.pr-cat   { font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; color: var(--grey); margin-bottom: .3rem; transition: color .25s; }
+.pr-name  { font-family: 'Epilogue', sans-serif; font-weight: 700; font-size: 1.2rem; }
+.pr-desc  { padding: 1.8rem 2rem; color: var(--mid); font-size: .88rem; line-height: 1.65; border-right: 1px solid var(--line); transition: color .25s; }
+.pr-price { display: none; } /* Price hidden — not shown at launch */
+.pr-action { padding: 1.8rem 2rem; display: flex; flex-direction: column; align-items: flex-end; gap: .6rem; }
+
+/* Arrow button on the right of each product row */
+.pr-arrow { width: 36px; height: 36px; border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; font-size: 1rem; transition: border-color .25s, color .25s; }
+
+
+/* ─────────────────────────────────────────────
+   11. HOW IT WORKS
+   Two-column layout: steps on left, big stat on right.
+───────────────────────────────────────────── */
+.how-wrap  { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin-top: 4rem; }
+.how-left  { border-right: 1px solid var(--line); padding-right: 4rem; }
+.how-steps { margin-top: 3rem; }
+
+.h-step {
+  display: flex; gap: 1.8rem; padding: 1.8rem 0;
+  border-bottom: 1px solid var(--line); align-items: flex-start;
+}
+.h-step:first-child { padding-top: 0; }
+.h-step:last-child  { border-bottom: none; }
+
+/* Step number — faint until hovered */
+.h-n { font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; color: rgba(11,11,11,.12); line-height: 1; min-width: 2.5rem; transition: color .22s; }
+.h-step:hover .h-n { color: var(--black); } /* Darken number on hover */
+
+.h-body h4 { font-weight: 700; font-size: 1rem; margin-bottom: .3rem; }
+.h-body p  { color: var(--mid); font-size: .87rem; line-height: 1.65; }
+
+/* Right side — very large stat number */
+.how-right { padding-left: 4rem; display: flex; flex-direction: column; justify-content: center; }
+.how-big   { font-family: 'Bebas Neue', sans-serif; font-size: clamp(5rem, 8vw, 9rem); line-height: .88; margin-bottom: 1.5rem; }
+.how-right p { color: var(--mid); font-size: .98rem; line-height: 1.72; max-width: 360px; }
+
+
+/* ─────────────────────────────────────────────
+   12. EARLY ACCESS CTA
+   Full-width dark section with email capture form.
+───────────────────────────────────────────── */
+.cta-sec {
+  padding: 8rem 5vw;
+  background: var(--black); color: var(--white);
+  position: relative; overflow: hidden;
+  text-align: center;
+}
+
+/* Subtle grid overlay on CTA background */
+.cta-sec::before {
+  content: ''; position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+  background-size: 55px 55px;
+}
+
+/* "Early Access Open" badge */
+.cta-label {
+  display: inline-flex; align-items: center; gap: .5rem;
+  font-size: .7rem; letter-spacing: .15em; text-transform: uppercase;
+  color: rgba(255,255,255,.45); border: 1px solid rgba(255,255,255,.12);
+  padding: .35rem .9rem; margin-bottom: 2rem; position: relative; z-index: 1;
+}
+
+.cta-sec h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(3.5rem, 7vw, 9rem); line-height: .9; letter-spacing: .02em;
+  position: relative; z-index: 1; margin-bottom: 1.5rem;
+}
+.cta-sec h2 .s { -webkit-text-stroke: 2px rgba(255,255,255,.3); color: transparent; }
+.cta-sec p { color: rgba(255,255,255,.42); font-size: 1rem; max-width: 420px; margin: 0 auto 2.5rem; position: relative; z-index: 1; line-height: 1.7; }
+
+/* Email input + submit button row */
+.email-form {
+  display: flex; max-width: 480px; margin: 0 auto;
+  position: relative; z-index: 1; border: 1px solid rgba(255,255,255,.15);
+}
+.email-form input {
+  flex: 1; background: rgba(255,255,255,.05); color: var(--white);
+  border: none; outline: none; padding: 1rem 1.4rem;
+  font-family: 'Epilogue', sans-serif; font-size: .88rem; font-weight: 300;
+}
+.email-form input::placeholder { color: rgba(255,255,255,.3); }
+.email-form button {
+  background: var(--white); color: var(--black);
+  font-family: 'Epilogue', sans-serif; font-weight: 700;
+  font-size: .78rem; letter-spacing: .1em; text-transform: uppercase;
+  padding: 1rem 1.6rem; border: none;
+  transition: background .22s; white-space: nowrap;
+}
+.email-form button:hover { background: rgba(255,255,255,.85); }
+.email-note { font-size: .7rem; color: rgba(255,255,255,.28); margin-top: .9rem; position: relative; z-index: 1; }
+
+
+/* ─────────────────────────────────────────────
+   13. FOOTER
+   Orange footer matching Walgi brand.
+───────────────────────────────────────────── */
+footer {
+  background: var(--black);
+  color: var(--white);
+  padding: 0 5vw 0;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle texture overlay */
+footer::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: radial-gradient(circle at 80% 20%, rgba(255,255,255,.06) 0%, transparent 60%),
+                    radial-gradient(circle at 10% 80%, rgba(0,0,0,.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* ── TOP CTA BAR ── */
+.foot-cta-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 3.5rem 0 3rem; gap: 2rem; flex-wrap: wrap;
+  position: relative; z-index: 1;
+}
+.foot-cta-quote {
+  font-family: 'Epilogue', sans-serif;
+  font-size: clamp(1.3rem, 2.5vw, 2rem);
+  font-weight: 300; line-height: 1.4;
+  color: var(--white); max-width: 520px;
+}
+.foot-cta-right {
+  display: flex; flex-direction: column; align-items: flex-end; gap: .75rem;
+}
+.foot-contact-email {
+  color: rgba(255,255,255,.9); text-decoration: none;
+  font-size: .9rem; display: flex; align-items: center; gap: .4rem;
+  transition: color .2s;
+}
+.foot-contact-email:hover { color: #fff; }
+.foot-contact-phone {
+  font-size: 1.3rem; font-weight: 600; color: var(--white); letter-spacing: .02em;
+}
+.foot-contact-btn {
+  display: inline-flex; align-items: center;
+  border: 1.5px solid rgba(255,255,255,.7);
+  border-radius: 999px; padding: .6rem 1.6rem;
+  font-size: .75rem; letter-spacing: .12em; text-transform: uppercase;
+  font-weight: 600; color: var(--white); text-decoration: none;
+  transition: background .2s, border-color .2s;
+}
+.foot-contact-btn:hover { background: rgba(255,255,255,.15); border-color: #fff; }
+
+/* Divider */
+.foot-divider {
+  border: none;
+  border-top: 1px solid rgba(255,255,255,.2);
+  position: relative; z-index: 1;
+}
+
+/* ── MAIN GRID ── */
+.foot-top {
+  display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem;
+  padding: 3rem 0 3rem;
+  border-bottom: 1px solid rgba(255,255,255,.2);
+  position: relative; z-index: 1;
+}
+
+/* Logo row */
+.foot-logo-wrap {
+  display: flex; align-items: center; gap: .7rem; margin-bottom: 1rem;
+}
+.foot-logo-icon {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: var(--white); color: var(--black);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; font-weight: 700; flex-shrink: 0;
+}
+.foot-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2rem; letter-spacing: .07em; color: var(--white);
+}
+.foot-brand-desc {
+  color: rgba(255,255,255,.7); font-size: .87rem;
+  line-height: 1.7; margin-bottom: 1.8rem;
+}
+
+/* Address */
+.foot-address-block { margin-top: .5rem; }
+.foot-col-label {
+  font-size: .65rem; letter-spacing: .18em; text-transform: uppercase;
+  color: rgba(255,255,255,.5); margin-bottom: .5rem; font-weight: 600;
+}
+.foot-address-text {
+  color: rgba(255,255,255,.8); font-size: .87rem; line-height: 1.8;
+}
+
+/* Link columns */
+.foot-col h5 {
+  font-weight: 700; font-size: .68rem; letter-spacing: .14em;
+  text-transform: uppercase; color: rgba(255,255,255,.5);
+  margin-bottom: 1.2rem;
+}
+.foot-col ul  { list-style: none; }
+.foot-col li  { margin-bottom: .65rem; }
+.foot-col a   {
+  color: rgba(255,255,255,.8); text-decoration: none;
+  font-size: .87rem; transition: color .2s;
+}
+.foot-col a:hover { color: var(--white); }
+
+/* ── BOTTOM BAR ── */
+.foot-bottom {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 1.5rem 0;
+  color: rgba(255,255,255,.45); font-size: .77rem;
+  position: relative; z-index: 1;
+}
+.foot-bottom a { color: rgba(255,255,255,.45); text-decoration: none; transition: color .2s; }
+.foot-bottom a:hover { color: var(--white); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .foot-cta-bar { flex-direction: column; align-items: flex-start; }
+  .foot-cta-right { align-items: flex-start; }
+  .foot-top { grid-template-columns: 1fr 1fr; }
+  .foot-brand { grid-column: 1 / -1; }
+}
+
+
+/* ─────────────────────────────────────────────
+   14. DARK MODE OVERRIDES
+   Applied when <body> has class 'dark-mode'.
+   Triggered by clicking the 💡 Lights tile in the mockup.
+   Every element that uses hardcoded colours needs
+   an override here — CSS variables alone aren't enough
+   because many colours are hardcoded rgba values.
+───────────────────────────────────────────── */
+body.dark-mode { background: #111110; color: #f0eeea;}
+body.dark-mode .logo            { color: #f0eeea; }
+body.dark-mode .logo-img-light  { display: none; }
+body.dark-mode .logo-img-dark   { display: block; }
+
+/* Navigation */
+body.dark-mode nav              { background: #111110; border-bottom-color: rgba(255,255,255,.08); }
+body.dark-mode .logo            { color: #f0eeea; }
+body.dark-mode .nav-tag         { color: #6e6c68; border-color: rgba(255,255,255,.1); }
+body.dark-mode .nav-cta         { background: #f0eeea; color: #111110; border-color: #f0eeea; }
+body.dark-mode .nav-cta:hover   { background: transparent; color: #f0eeea; }
+
+/* Hero */
+body.dark-mode .hero                 { border-bottom-color: rgba(255,255,255,.08); }
+body.dark-mode .hero-left            { border-right-color: rgba(255,255,255,.08); }
+body.dark-mode .hero-h1              { color: #f0eeea; }
+body.dark-mode .hero-h1 .stroke      { -webkit-text-stroke-color: #f0eeea; color: transparent; }
+body.dark-mode .hero-desc            { color: #7a7875; }
+body.dark-mode .launch-pill          { border-color: rgba(255,255,255,.2); color: #f0eeea; }
+body.dark-mode .launch-dot           { background: #f0eeea; }
+body.dark-mode .btn-fill             { background: #f0eeea; color: #111110; border-color: #f0eeea; }
+body.dark-mode .btn-fill:hover       { background: transparent; color: #f0eeea; }
+body.dark-mode .btn-ghost            { border-color: rgba(255,255,255,.25); color: #f0eeea; }
+body.dark-mode .btn-ghost:hover      { background: #f0eeea; color: #111110; }
+body.dark-mode .float-card           { background: #1c1c1a; color: #f0eeea; border-color: rgba(255,255,255,.1); }
+body.dark-mode .float-lbl            { color: #6e6c68; }
+
+/* Hero grid background */
+body.dark-mode .hero-right::before {
+  background-image:
+    linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px);
+}
+
+/* Strip */
+body.dark-mode .hero-strip           { border-top-color: rgba(255,255,255,.08); }
+body.dark-mode .strip-cell           { border-right-color: rgba(255,255,255,.08); }
+body.dark-mode .strip-text-label     { color: #5a5855; }
+body.dark-mode .strip-text-val       { color: #f0eeea; }
+
+/* Sections */
+body.dark-mode .sec                  { border-bottom-color: rgba(255,255,255,.08); }
+body.dark-mode .eyebrow              { color: #5a5855; }
+body.dark-mode .eyebrow::before      { background: #3a3835; }
+body.dark-mode .sec-title            { color: #f0eeea; }
+body.dark-mode .sec-title .stroke    { -webkit-text-stroke-color: #f0eeea; color: transparent; }
+body.dark-mode .sec-sub              { color: #7a7875; }
+
+/* Features */
+body.dark-mode .feat-grid            { border-color: rgba(255,255,255,.08); }
+body.dark-mode .feat-cell            { border-right-color: rgba(255,255,255,.08); border-bottom-color: rgba(255,255,255,.08); }
+body.dark-mode .fc-num               { color: #3a3835; }
+body.dark-mode .fc-icon              { border-color: rgba(255,255,255,.08); }
+body.dark-mode .feat-cell h3         { color: #f0eeea; }
+body.dark-mode .fc-sub               { color: #7a7875; }
+body.dark-mode .feat-cell:hover      { background: #f0eeea; color: #111110; }
+body.dark-mode .feat-cell:hover .fc-num  { color: rgba(11,11,11,.3); }
+body.dark-mode .feat-cell:hover .fc-sub  { color: rgba(11,11,11,.55); }
+
+/* Products */
+body.dark-mode .products-list        { border-color: rgba(255,255,255,.08); }
+body.dark-mode .prod-row             { border-bottom-color: rgba(255,255,255,.08); }
+body.dark-mode .pr-num               { color: #3a3835; border-right-color: rgba(255,255,255,.08); }
+body.dark-mode .pr-info              { border-right-color: rgba(255,255,255,.08); }
+body.dark-mode .pr-cat               { color: #5a5855; }
+body.dark-mode .pr-name              { color: #f0eeea; }
+body.dark-mode .pr-desc              { color: #7a7875; border-right-color: rgba(255,255,255,.08); }
+body.dark-mode .pr-arrow             { border-color: rgba(255,255,255,.12); color: #f0eeea; }
+body.dark-mode .prod-row:hover       { background: #f0eeea; color: #111110; }
+body.dark-mode .prod-row:hover .pr-cat   { color: rgba(11,11,11,.5); }
+body.dark-mode .prod-row:hover .pr-desc  { color: rgba(11,11,11,.5); }
+body.dark-mode .prod-row:hover .pr-num   { color: rgba(11,11,11,.3); }
+body.dark-mode .prod-row:hover .pr-arrow { border-color: rgba(11,11,11,.2); color: #111110; }
+
+/* How It Works */
+body.dark-mode .how-left             { border-right-color: rgba(255,255,255,.08); }
+body.dark-mode .h-step               { border-bottom-color: rgba(255,255,255,.08); }
+body.dark-mode .h-n                  { color: rgba(255,255,255,.08); }
+body.dark-mode .h-step:hover .h-n    { color: rgba(255,255,255,.5); }
+body.dark-mode .h-body h4            { color: #f0eeea; }
+body.dark-mode .h-body p             { color: #7a7875; }
+body.dark-mode .how-big              { color: #f0eeea; }
+body.dark-mode .how-big .stroke      { -webkit-text-stroke-color: #f0eeea; color: transparent; }
+body.dark-mode .how-right p          { color: #7a7875; }
+
+/* Footer */
+body.dark-mode footer                { background: #0a0a09; }
+body.dark-mode .foot-logo            { color: #f0eeea; }
+body.dark-mode .foot-brand p         { color: rgba(240,238,234,.38); }
+body.dark-mode .foot-col h5          { color: rgba(240,238,234,.3); }
+body.dark-mode .foot-col a           { color: rgba(240,238,234,.55); }
+body.dark-mode .foot-col a:hover     { color: #f0eeea; }
+body.dark-mode .foot-top             { border-bottom-color: rgba(255,255,255,.07); }
+body.dark-mode .foot-bottom          { color: rgba(240,238,234,.25); }
+
+/* Float cards — glassy dark style at night */
+body.dark-mode .float-card {
+  background: rgba(15,15,20,0.7);
+  color: #f0eeea;
+  border-color: rgba(255,255,255,.12);
+  backdrop-filter: blur(10px);
+}
+body.dark-mode .float-lbl { color: rgba(255,255,255,.45); }
+
+
+/* ─────────────────────────────────────────────
+   15. TEMPERATURE THEME — WARM & COOL
+   Applied via JS when temp goes above 24° (warm)
+   or below 21° (cool). Classes added to <body>:
+     body.temp-warm = orange/amber tint across the site
+     body.temp-cool = blue/cyan tint across the site
+
+   body::after creates a translucent colour overlay
+   on top of all content to give the tinted feel.
+───────────────────────────────────────────── */
+
+/* Full-page tint overlay using ::after pseudo-element */
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  pointer-events: none; z-index: 998;
+  background: transparent;
+  transition: background .7s ease;
+}
+body.temp-warm::after { background: rgba(255, 120, 20, 0.07); } /* Warm orange overlay */
+body.temp-cool::after { background: rgba(30, 180, 255, 0.07);  } /* Cool blue overlay */
+
+/* ── Warm theme accents ── */
+body.temp-warm nav   { border-bottom-color: rgba(255,140,0,.15); }
+body.temp-warm .marquee-wrap { background: #1a0e00; }
+body.temp-warm .launch-pill  { border-color: rgba(255,140,0,.5); color: #b35f00; }
+body.temp-warm .hero-h1 .stroke { -webkit-text-stroke-color: #cc6a00; }
+body.temp-warm .btn-fill         { background: #cc6a00; border-color: #cc6a00; }
+body.temp-warm .btn-fill:hover   { background: transparent; color: #cc6a00; }
+body.temp-warm .btn-ghost        { border-color: #cc6a00; color: #cc6a00; }
+body.temp-warm .nav-cta          { background: #cc6a00; border-color: #cc6a00; }
+body.temp-warm .eyebrow          { color: #cc6a00; }
+body.temp-warm .eyebrow::before  { background: #cc6a00; }
+body.temp-warm .sec-title .stroke  { -webkit-text-stroke-color: #cc6a00; }
+body.temp-warm .how-big .stroke    { -webkit-text-stroke-color: #cc6a00; }
+body.temp-warm .mock-dot           { background: #ff9a3c; }
+body.temp-warm .cta-sec            { background: #1a0900; }
+body.temp-warm footer              { background: #110800; }
+
+/* ── Cool theme accents ── */
+body.temp-cool nav   { border-bottom-color: rgba(69,212,255,.15); }
+body.temp-cool .marquee-wrap { background: #001a22; }
+body.temp-cool .launch-pill  { border-color: rgba(69,212,255,.5); color: #0077a8; }
+body.temp-cool .hero-h1 .stroke { -webkit-text-stroke-color: #0099cc; }
+body.temp-cool .btn-fill         { background: #0088bb; border-color: #0088bb; }
+body.temp-cool .btn-fill:hover   { background: transparent; color: #0088bb; }
+body.temp-cool .btn-ghost        { border-color: #0088bb; color: #0088bb; }
+body.temp-cool .nav-cta          { background: #0088bb; border-color: #0088bb; }
+body.temp-cool .eyebrow          { color: #0088bb; }
+body.temp-cool .eyebrow::before  { background: #0088bb; }
+body.temp-cool .sec-title .stroke  { -webkit-text-stroke-color: #0088bb; }
+body.temp-cool .how-big .stroke    { -webkit-text-stroke-color: #0088bb; }
+body.temp-cool .mock-dot           { background: #45d4ff; }
+body.temp-cool .cta-sec            { background: #001520; }
+body.temp-cool footer              { background: #001018; }
+
+/* ── Dark mode + warm/cool combined overrides ── */
+body.dark-mode.temp-warm .launch-pill  { color: #ffaa55; border-color: rgba(255,140,0,.5); }
+body.dark-mode.temp-cool  .launch-pill { color: #45d4ff; border-color: rgba(69,212,255,.5); }
+body.dark-mode.temp-warm .hero-h1 .stroke    { -webkit-text-stroke-color: #ff9a3c; }
+body.dark-mode.temp-cool  .hero-h1 .stroke   { -webkit-text-stroke-color: #45d4ff; }
+body.dark-mode.temp-warm .sec-title .stroke  { -webkit-text-stroke-color: #ff9a3c; }
+body.dark-mode.temp-cool  .sec-title .stroke { -webkit-text-stroke-color: #45d4ff; }
+body.dark-mode.temp-warm .how-big .stroke    { -webkit-text-stroke-color: #ff9a3c; }
+body.dark-mode.temp-cool  .how-big .stroke   { -webkit-text-stroke-color: #45d4ff; }
+body.dark-mode.temp-warm .eyebrow  { color: #ff9a3c; }
+body.dark-mode.temp-cool  .eyebrow { color: #45d4ff; }
+body.dark-mode.temp-warm footer  { background: #110800; }
+body.dark-mode.temp-cool  footer { background: #001018; }
+
+
+/* ─────────────────────────────────────────────
+   16. GATE OVERLAY
+   Two dark panels that slide in from left and right
+   to "lock" the website. Controlled by JS via
+   the .locked class on #gateOverlay.
+
+   The gate panels are purely visual (pointer-events: none)
+   so they never block clicks on the mockup or unlock button.
+───────────────────────────────────────────── */
+.gate-overlay {
+  position: fixed; inset: 0; z-index: 350; /* Above hero-right (50), below mockup (400) */
+  display: flex; align-items: stretch;
+  pointer-events: none; /* Never intercept clicks */
+}
+
+/* Individual left and right gate panel */
+.gate-panel {
+  flex: 1; height: 100%;
+  background: #111110;
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+  transition: transform 1s cubic-bezier(.77,0,.18,1); /* Smooth slide animation */
+  pointer-events: none;
+}
+
+/* Starting position — panels are off-screen */
+.gate-panel.gate-left  { transform: translateX(-100%); border-right: 2px solid #2a2a28; }
+.gate-panel.gate-right { transform: translateX(100%);  border-left:  2px solid #2a2a28; }
+
+/* When locked — slide panels into view */
+.gate-overlay.locked .gate-panel.gate-left  { transform: translateX(0); }
+.gate-overlay.locked .gate-panel.gate-right { transform: translateX(0); }
+
+/* Vertical iron bars on each gate panel */
+.gate-bars { display: flex; gap: 18px; height: 100%; align-items: stretch; padding: 0 24px; }
+.gate-bar {
+  width: 8px;
+  background: linear-gradient(180deg, #3a3a38 0%, #222220 50%, #3a3a38 100%);
+  border-radius: 4px; position: relative;
+}
+
+/* Decorative rivets on each bar */
+.gate-bar::before, .gate-bar::after {
+  content: '';
+  position: absolute; left: 50%; transform: translateX(-50%);
+  width: 14px; height: 14px; background: #4a4a48; border-radius: 50%;
+}
+.gate-bar::before { top: 18%; }
+.gate-bar::after  { top: 78%; }
+
+/* Horizontal crossbar in the middle of the gate */
+.gate-cross-h {
+  position: absolute; top: 50%; left: 0; right: 0; height: 10px;
+  background: linear-gradient(90deg, #2a2a28, #444442, #2a2a28);
+  transform: translateY(-50%);
+  box-shadow: 0 2px 8px rgba(0,0,0,.5);
+}
+
+/* Decorative repeating spike pattern at top of each panel */
+.gate-panel::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 6px;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0px, transparent 20px,
+    #3a3a38 20px, #3a3a38 28px
+  );
+}
+
+/* ── Gate Locked Message ──
+   Separate fixed element — NOT inside the gate panels.
+   Always above everything (z-index: 9999).
+   Hidden by default, shown after gate closes. */
+.gate-message {
+  position: fixed; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  text-align: center; color: #f0eeea;
+  pointer-events: none; /* Disabled until gate is fully closed */
+  opacity: 0;
+  transition: opacity .4s ease .6s; /* Fade in 600ms after locking */
+  white-space: nowrap;
+}
+/* .visible class added by JS after gate slides in */
+.gate-message.visible { opacity: 1; pointer-events: all; }
+
+.gate-lock-icon { font-size: 2.5rem; margin-bottom: .75rem; animation: blink 2s ease-in-out infinite; }
+.gate-msg-title { font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; letter-spacing: .08em; line-height: 1; margin-bottom: .5rem; }
+.gate-msg-sub   { font-family: 'Epilogue', sans-serif; font-size: .82rem; color: rgba(255,255,255,.4); letter-spacing: .06em; margin-bottom: 1.5rem; }
+
+/* Unlock button inside the gate message */
+.gate-unlock-btn {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,.25); color: #f0eeea;
+  font-family: 'Epilogue', sans-serif; font-weight: 600;
+  font-size: .8rem; letter-spacing: .1em; text-transform: uppercase;
+  padding: .75rem 1.8rem;
+  transition: background .22s, border-color .22s;
+}
+.gate-unlock-btn:hover { background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.5); }
+
+
+/* ─────────────────────────────────────────────
+   MEDIA GALLERY SECTION
+   Layout:
+   - One large featured video with custom play button
+   - Image grid: large left + 2 stacked right + full-width bottom
+───────────────────────────────────────────── */
+
+/* ── Featured Video ── */
+.media-video-wrap {
+  position: relative;
+  width: 100%;
+  margin-top: 3.5rem;
+  border: 1px solid var(--line);
+  overflow: hidden;
+  background: #0a0a09;
+  /* 16:9 aspect ratio */
+  aspect-ratio: 16 / 9;
+}
+
+.media-video {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  opacity: 0.85;
+  transition: opacity .3s;
+}
+.media-video.playing { opacity: 1; }
+
+/* Custom play button — centred over the video */
+.media-play-btn {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 1rem;
+  background: rgba(0,0,0,.35);
+  border: none;
+  transition: background .25s;
+}
+.media-play-btn:hover { background: rgba(0,0,0,.2); }
+
+/* Hide play button once video is playing */
+.media-play-btn.hidden { display: none; }
+
+.play-icon {
+  width: 72px; height: 72px;
+  background: var(--white); color: var(--black);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.6rem;
+  transition: transform .2s, background .2s;
+}
+.media-play-btn:hover .play-icon { transform: scale(1.08); }
+
+.play-label {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.1rem; letter-spacing: .12em;
+  color: var(--white);
+}
+
+/* Small tag bottom-left of video */
+.media-video-tag {
+  position: absolute; bottom: 1rem; left: 1rem;
+  font-size: .68rem; letter-spacing: .12em; text-transform: uppercase;
+  color: rgba(255,255,255,.6);
+  background: rgba(0,0,0,.45);
+  padding: .3rem .7rem; border-radius: 100px;
+}
+
+/* ── Image Grid ── */
+.media-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+/* Image wrapper — handles hover overlay */
+.media-img-wrap {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: #0a0a09;
+  aspect-ratio: 4 / 3;
+}
+
+/* Large left image — taller */
+.media-img-wrap.large { aspect-ratio: 3 / 4; }
+
+/* Full-width bottom image — spans both columns */
+.media-img-wrap.full {
+  grid-column: 1 / -1;
+  aspect-ratio: 21 / 9;
+}
+
+/* Right column stacks 2 images vertically */
+.media-grid-col {
+  display: flex; flex-direction: column; gap: 1rem;
+}
+.media-grid-col .media-img-wrap {
+  flex: 1;
+  aspect-ratio: unset;
+  min-height: 0;
+}
+
+/* The actual image */
+.media-img {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+  transition: transform .5s ease, filter .3s;
+  filter: grayscale(15%);
+}
+.media-img-wrap:hover .media-img {
+  transform: scale(1.04);
+  filter: grayscale(0%);
+}
+
+/* Caption — slides up on hover */
+.media-img-caption {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: .75rem 1rem;
+  background: linear-gradient(to top, rgba(0,0,0,.7), transparent);
+  font-family: 'Epilogue', sans-serif; font-weight: 500;
+  font-size: .82rem; letter-spacing: .04em;
+  color: rgba(255,255,255,.9);
+  transform: translateY(100%);
+  transition: transform .3s ease;
+}
+.media-img-wrap:hover .media-img-caption { transform: translateY(0); }
+
+/* Placeholder styling when no image is loaded */
+.media-img[src="image1.jpg"],
+.media-img[src="image2.jpg"],
+.media-img[src="image3.jpg"],
+.media-img[src="image4.jpg"] {
+  /* Show a patterned placeholder if image file doesn't exist */
+  background:
+    repeating-linear-gradient(
+      45deg,
+      rgba(255,255,255,.02) 0px,
+      rgba(255,255,255,.02) 1px,
+      transparent 1px,
+      transparent 10px
+    ),
+    #111110;
+  /* Use min-height so the grid cell still has height */
+  min-height: 160px;
+}
+
+/* Responsive */
+@media(max-width: 720px) {
+  .media-grid { grid-template-columns: 1fr; }
+  .media-img-wrap.large,
+  .media-img-wrap.full   { aspect-ratio: 16 / 9; }
+  .media-grid-col        { gap: 1rem; }
+}
+
+/* ─────────────────────────────────────────────
+   PLAYLIST PLAYER
+   Slides up from bottom when Audio tile is ON.
+   Hidden (translateY 100%) by default.
+───────────────────────────────────────────── */
+
+/* Player container — fixed bottom right */
+.playlist-player {
+  position: fixed;
+  bottom: 1.5rem; right: 1.5rem;
+  width: 300px;
+  background: #0f0f0e;
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 20px;
+  padding: 1.25rem;
+  z-index: 600; /* Above nav (500), below gate message (9999) */
+  transform: translateY(calc(100% + 2rem)); /* Hidden below viewport */
+  opacity: 0;
+  transition: transform .45s cubic-bezier(.4,0,.2,1), opacity .35s ease;
+  box-shadow: 0 24px 60px rgba(0,0,0,.5);
+}
+
+/* Visible state — triggered by adding .pl-visible via JS */
+.playlist-player.pl-visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* ── Header: track name + equaliser ── */
+.pl-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 1rem;
+}
+.pl-label {
+  font-size: .6rem; letter-spacing: .12em; text-transform: uppercase;
+  color: rgba(255,255,255,.3); margin-bottom: .2rem;
+}
+.pl-track-name {
+  font-family: 'Epilogue', sans-serif; font-weight: 700;
+  font-size: .9rem; color: #f0eeea;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  max-width: 190px;
+}
+
+/* Animated equaliser bars (4 bars, staggered animation) */
+.pl-eq {
+  display: flex; align-items: flex-end; gap: 3px;
+  height: 20px; opacity: 0;
+  transition: opacity .3s;
+}
+.pl-eq.active { opacity: 1; } /* Show only when playing */
+.pl-eq span {
+  width: 3px; background: #6fff9e; border-radius: 2px;
+  animation: eqBar 0.8s ease-in-out infinite alternate;
+}
+.pl-eq span:nth-child(1) { animation-delay: 0s;    animation-duration: 0.6s; }
+.pl-eq span:nth-child(2) { animation-delay: 0.15s; animation-duration: 0.8s; }
+.pl-eq span:nth-child(3) { animation-delay: 0.3s;  animation-duration: 0.5s; }
+.pl-eq span:nth-child(4) { animation-delay: 0.45s; animation-duration: 0.7s; }
+
+@keyframes eqBar {
+  from { height: 4px; }
+  to   { height: 18px; }
+}
+
+/* ── Progress bar ── */
+.pl-progress-wrap { margin-bottom: .85rem; }
+.pl-progress-bar {
+  height: 4px; background: rgba(255,255,255,.1);
+  border-radius: 100px; overflow: hidden;
+  cursor: pointer; margin-bottom: .4rem;
+}
+.pl-progress-fill {
+  height: 100%; width: 0%;
+  background: linear-gradient(90deg, #6fff9e, #45d4ff);
+  border-radius: 100px;
+  transition: width .5s linear;
+}
+.pl-times {
+  display: flex; justify-content: space-between;
+  font-size: .62rem; color: rgba(255,255,255,.3);
+}
+
+/* ── Playback controls ── */
+.pl-controls {
+  display: flex; align-items: center; gap: .6rem;
+  margin-bottom: 1rem;
+}
+.pl-btn {
+  background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.1);
+  color: #f0eeea; font-size: .95rem;
+  width: 34px; height: 34px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .2s, transform .15s;
+}
+.pl-btn:hover  { background: rgba(255,255,255,.15); }
+.pl-btn:active { transform: scale(.92); }
+
+/* Larger play/pause button */
+.pl-play {
+  width: 40px; height: 40px;
+  background: #f0eeea; color: #0f0f0e; border-color: #f0eeea;
+  font-size: 1rem;
+}
+.pl-play:hover { background: rgba(240,238,234,.85); }
+
+/* Volume slider */
+.pl-volume {
+  flex: 1; height: 3px;
+  -webkit-appearance: none; appearance: none;
+  background: rgba(255,255,255,.15); border-radius: 100px; outline: none;
+}
+.pl-volume::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px; height: 12px;
+  background: #f0eeea; border-radius: 50%;
+}
+.pl-vol-icon { font-size: .8rem; }
+
+/* ── Track list ── */
+.pl-list {
+  list-style: none;
+  display: flex; flex-direction: column; gap: .3rem;
+  max-height: 140px; overflow-y: auto;
+  /* Custom scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,.15) transparent;
+}
+.pl-list::-webkit-scrollbar      { width: 4px; }
+.pl-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,.15); border-radius: 100px; }
+
+.pl-item {
+  padding: .55rem .75rem;
+  font-size: .82rem; color: rgba(255,255,255,.5);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background .2s, color .2s;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.pl-item:hover  { background: rgba(255,255,255,.07); color: #f0eeea; }
+
+/* Active / currently playing track */
+.pl-item.active { background: rgba(111,255,158,.1); color: #6fff9e; border: 1px solid rgba(111,255,158,.2); }
+
+/* ─────────────────────────────────────────────
+   17. SCROLL REVEAL ANIMATION
+   Elements with class .rev start invisible and
+   shifted down 22px. When .vis is added by JS,
+   they fade in and slide up to their natural position.
+───────────────────────────────────────────── */
+.rev { opacity: 0; transform: translateY(22px); transition: opacity .75s ease, transform .75s ease; }
+.rev.vis { opacity: 1; transform: none; }
+
+
+/* ─────────────────────────────────────────────
+   18. RESPONSIVE / MOBILE
+   Breakpoints: 960px (tablet), 600px (mobile)
+───────────────────────────────────────────── */
+@media(max-width: 960px) {
+  /* Hero: stack columns vertically, hide phone mockup */
+  .hero-main { grid-template-columns: 1fr; }
+  .hero-right { display: none; }
+
+  /* Strip: 2 columns instead of 4 */
+  .hero-strip { grid-template-columns: 1fr 1fr; }
+
+  /* Features: single column */
+  .feat-grid { grid-template-columns: 1fr; }
+  .feat-cell { border-right: none !important; border-bottom: 1px solid var(--line) !important; }
+  .feat-cell:last-child { border-bottom: none !important; }
+
+  /* Products: collapse to single column */
+  .prod-row { grid-template-columns: 1fr; }
+  .pr-num, .pr-desc { display: none; }
+  .pr-info { border-right: none; }
+  .pr-action { align-items: flex-start; }
+
+  /* How It Works: stack columns */
+  .how-wrap { grid-template-columns: 1fr; }
+  .how-left { border-right: none; padding-right: 0; border-bottom: 1px solid var(--line); padding-bottom: 3rem; margin-bottom: 3rem; }
+  .how-right { padding-left: 0; }
+
+  /* Footer: 2 columns */
+  .foot-top { grid-template-columns: 1fr 1fr; }
+}
+
+@media(max-width: 600px) {
+  /* Strip: single column */
+  .hero-strip { grid-template-columns: 1fr; }
+  .strip-cell { border-right: none; border-bottom: 1px solid var(--line); }
+
+  /* Email form: stack vertically */
+  .email-form { flex-direction: column; }
+  .email-form button { padding: 1rem; }
+}
+
+/* ─────────────────────────────────────────────
+   19. 3D MODEL VIEWER SECTION
+   Full-width interactive 3D showcase using
+   Google's <model-viewer> web component.
+───────────────────────────────────────────── */
+
+/* Section wrapper */
+.sec-3d {
+  background: var(--black);
+  color: var(--white);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle background grid pattern */
+.sec-3d::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(244,243,239,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(244,243,239,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+}
+/* =============================================================
+   walgi-styles.css
+   Walgi Smart Home — All Styles
+
+   Table of Contents:
+   01. CSS Variables & Reset
+   02. Base Body & Typography
+   03. Navigation
+   04. Hero Section
+   05. Hero Right — Phone Mockup
+   06. Hero Bottom Strip
+   07. Marquee / Ticker
+   08. Shared Section Styles
+   09. Features Grid
+   10. Products List
+   11. How It Works
+   12. Early Access CTA
+   13. Footer
+   14. Dark Mode Overrides
+   15. Temperature Theme — Warm & Cool
+   16. Gate Overlay
+   17. Scroll Reveal Animation
+   18. Responsive / Mobile
+   ============================================================= */
+
+
+/* ─────────────────────────────────────────────
+   01. CSS VARIABLES & RESET
+   Global colour tokens used throughout.
+   Changing these affects the whole site.
+───────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --black: #0b0b0b;               /* Primary dark colour */
+  --white: #f4f3ef;               /* Primary light background */
+  --mid:   #5c5a57;               /* Secondary text / muted */
+  --grey:  #aeaca7;               /* Labels, placeholders */
+  --line:  rgba(11,11,11,0.1);    /* Subtle divider lines */
+}
+
+html { scroll-behavior: smooth; }
+
+
+/* ─────────────────────────────────────────────
+   02. BASE BODY
+───────────────────────────────────────────── */
+body {
+  background: var(--white);
+  color: var(--black);
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 300;
+  overflow-x: hidden;
+  transition: background .4s, color .4s; /* Smooth dark mode transition */
+}
+
+
+/* ─────────────────────────────────────────────
+   03. NAVIGATION
+   Fixed top bar with logo, launch tag, and CTA button.
+───────────────────────────────────────────── */
+
+/* Gate message pointer-events — always clickable above overlay */
+.gate-message { pointer-events: all !important; }
+
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.3rem 5vw;
+  background: var(--white);
+}
+
+/* logo */
+.logo {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+.logo-box {
+  width: 160px;
+  height: 50px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Light mode logo — visible by default */
+.logo-img-light {
+  width: 200px;
+  height: 160px;
+  object-fit: contain;
+  display: block;   /* ← THIS is what makes it visible in light mode */
+}
+
+/* Dark mode logo — hidden by default */
+.logo-img-dark {
+  width: 200px;
+  height: 160px;
+  object-fit: contain;
+  display: none;   /* ← hidden until dark mode activates */
+}
+
+/* "Launching 2025" badge */
+.nav-tag {
+  font-size: .7rem; letter-spacing: .15em; text-transform: uppercase;
+  color: var(--grey); padding: .3rem .8rem; border: 1px solid var(--line);
+}
+
+/* "Join Waitlist" button */
+.nav-cta {
+  font-family: 'Epilogue', sans-serif; font-weight: 500;
+  font-size: .78rem; letter-spacing: .1em; text-transform: uppercase;
+  padding: .6rem 1.5rem; background: var(--black); color: var(--white);
+  border: 1px solid var(--black);
+  transition: background .22s, color .22s;
+}
+.nav-cta:hover { background: transparent; color: var(--black); }
+
+
+/* ─────────────────────────────────────────────
+   04. HERO SECTION
+   Full-viewport split layout:
+   Left = headline + description + buttons
+   Right = interactive phone mockup
+───────────────────────────────────────────── */
+.hero {
+  min-height: 100vh; padding-top: 76px; /* 76px = nav height */
+  display: grid; grid-template-rows: 1fr auto;
+}
+
+.hero-main {
+  display: grid; grid-template-columns: 1fr 1fr;
+}
+
+.hero-left {
+  padding: 5rem 5vw 4rem;
+  display: flex; flex-direction: column; justify-content: space-between;
+}
+
+/* "Now Launching in India" pill badge */
+.launch-pill {
+  display: inline-flex; align-items: center; gap: .55rem;
+  font-size: .7rem; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--black); border: 1px solid var(--black);
+  padding: .35rem .9rem; width: fit-content; margin-bottom: 3.5rem;
+}
+
+/* Pulsing dot inside the launch pill */
+.launch-dot {
+  width: 6px; height: 6px; background: var(--black);
+  border-radius: 50%; animation: blink 1.8s ease-in-out infinite;
+}
+
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
+
+/* Main headline — very large Bebas Neue */
+.hero-h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(4.5rem, 8.5vw, 10.5rem);
+  line-height: .9; letter-spacing: .01em;
+}
+
+/* Outlined (hollow) text variant for the headline */
+.hero-h1 .stroke { -webkit-text-stroke: 2px var(--black); color: transparent; }
+
+/* Bottom row of the hero left: description + buttons */
+.hero-foot {
+  padding-top: 3rem; display: flex;
+  justify-content: space-between; align-items: flex-end;
+}
+
+.hero-desc { max-width: 320px; color: var(--mid); font-size: .98rem; line-height: 1.72; }
+.hero-btns { display: flex; flex-direction: column; align-items: flex-end; gap: .85rem; }
+
+/* Filled primary button */
+.btn-fill {
+  background: var(--black); color: var(--white);
+  font-family: 'Epilogue', sans-serif; font-weight: 500;
+  font-size: .78rem; letter-spacing: .1em; text-transform: uppercase;
+  padding: .85rem 2rem; border: 1px solid var(--black);
+  transition: background .22s, color .22s;
+}
+.btn-fill:hover { background: transparent; color: var(--black); }
+
+/* Outlined ghost button */
+.btn-ghost {
+  background: transparent; color: var(--black);
+  font-family: 'Epilogue', sans-serif; font-weight: 500;
+  font-size: .78rem; letter-spacing: .1em; text-transform: uppercase;
+  padding: .85rem 2rem; border: 1px solid var(--black);
+  transition: background .22s, color .22s;
+}
+.btn-ghost:hover { background: var(--black); color: var(--white); }
+
+
+/* ─────────────────────────────────────────────
+   05. HERO RIGHT — PHONE MOCKUP
+   Contains the interactive Walgi app mockup card.
+   z-index: 50 — sits above the hero background images
+   but BELOW the gate overlay (z-index: 350).
+   The mockup itself is z-index: 400 so it stays
+   visible even when gate is closed.
+───────────────────────────────────────────── */
+.hero-right {
+  padding: 4rem;
+  display: flex; align-items: center; justify-content: right;
+  position: relative; overflow: hidden;
+  z-index: 50; /* Below gate overlay so gate covers it fully */
+}
+
+/* Remove the old dot-grid background pattern
+   (images replace it now) */
+.hero-right::before { display: none; }
+
+/* ── Day / Night background images ──
+   Both images are absolutely positioned and fill the panel.
+   JS toggles .hidden on each to switch between them. */
+.hero-bg-img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center;
+  transition: opacity .8s ease; /* Smooth crossfade */
+  z-index: 0;
+}
+
+/* Day image — visible by default */
+.hero-bg-day   { opacity: 1; }
+
+/* Night image — hidden by default, shown when lights off */
+.hero-bg-night { opacity: 0; }
+
+/* When body has dark-mode class — swap images */
+body.dark-mode .hero-bg-day   { opacity: 0; }
+body.dark-mode .hero-bg-night { opacity: 1; }
+
+/* Dark gradient overlay so the mockup card stays readable */
+.hero-bg-overlay {
+  position: absolute; inset: 0; z-index: 1;
+  background: linear-gradient(
+    135deg,
+    rgba(0,0,0,0.35) 0%,
+    rgba(0,0,0,0.15) 50%,
+    rgba(0,0,0,0.45) 100%
+  );
+  transition: background .8s ease;
+}
+
+/* Night overlay is darker */
+body.dark-mode .hero-bg-overlay {
+  background: linear-gradient(
+    135deg,
+    rgba(0,0,10,0.6) 0%,
+    rgba(0,0,20,0.4) 50%,
+    rgba(0,0,10,0.7) 100%
+  );
+}
+
+/* Phone card — dark background simulating a phone screen */
+.mockup {
+  position: relative; z-index: 400; /* Above gate overlay */
+  width: 280px;
+  background: var(--black);
+  color: var(--white);
+  border-radius: 28px;
+  padding: 1.5rem;
+  box-shadow: 0 40px 80px rgba(0,0,0,.35), 0 0 0 1px rgba(255,255,255,.06);
+  overflow: hidden; /* Keeps image within rounded corners */
+}
+
+/* ── Mockup background image ──
+   Absolutely positioned behind all UI elements.
+   A dark overlay ensures the white text stays readable. */
+.mockup-bg {
+  position: absolute; inset: 0;
+  z-index: 0; /* Behind everything inside mockup */
+  border-radius: 28px;
+  overflow: hidden;
+}
+
+.mockup-bg-img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0.45; /* Dim so UI tiles are readable */
+  transition: opacity .4s ease;
+}
+
+/* Gradient overlay — darker at bottom so energy bar stays readable */
+.mockup-bg-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(11,11,11,0.55) 0%,
+    rgba(11,11,11,0.3)  40%,
+    rgba(11,11,11,0.7)  100%
+  );
+}
+
+/* Make sure all mockup children sit above the background */
+.mockup > *:not(.mockup-bg) { position: relative; z-index: 1; }
+
+/* Top bar: app title + status indicator */
+.mockup-bar {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 1.2rem;
+}
+.mockup-title  { font-family: 'Epilogue', sans-serif; font-weight: 700; font-size: .82rem; letter-spacing: .04em; }
+.mockup-status { display: flex; align-items: center; gap: .35rem; font-size: .65rem; color: rgba(255,255,255,.45); }
+
+/* Green pulsing status dot */
+.mock-dot { width: 6px; height: 6px; background: #6fff9e; border-radius: 50%; animation: blink 2s ease-in-out infinite; }
+
+/* Phone notch bar at top */
+.phone-notch  { display: flex; justify-content: center; margin-bottom: 1rem; }
+.notch-bar    { width: 60px; height: 5px; background: rgba(255,255,255,.15); border-radius: 100px; }
+
+/* ── Temperature Ring ──
+   Circular dial showing current temperature.
+   Uses conic-gradient for the progress arc.
+   JS dynamically changes the gradient colour and percentage. */
+.temp-ring-wrap { display: flex; justify-content: center; margin-bottom: 1.2rem; flex-direction: column; align-items: center; }
+
+.temp-ring {
+  width: 120px; height: 120px; border-radius: 50%;
+  border: 2px solid rgba(255,255,255,.1);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  position: relative;
+  background: conic-gradient(rgba(255,255,255,.15) 0% 65%, rgba(255,255,255,.04) 65% 100%);
+  transition: background .6s ease, box-shadow .6s ease;
+}
+
+/* Inner circle mask — creates the donut ring effect */
+.temp-ring::after {
+  content: ''; position: absolute; inset: 8px;
+  border-radius: 50%; background: var(--black);
+}
+
+.temp-num { font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; line-height: 1; position: relative; z-index: 1; }
+.temp-lbl { font-size: .6rem; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.4); position: relative; z-index: 1; }
+
+/* Warm glow (orange) when temp ≥ 25° */
+.temp-ring.warm { box-shadow: 0 0 30px rgba(255,140,0,.35); }
+/* Cool glow (blue) when temp ≤ 20° */
+.temp-ring.cool { box-shadow: 0 0 30px rgba(69,212,255,.35); }
+
+/* ▲ / ▼ temperature adjustment arrows */
+.temp-arrow {
+  position: absolute; left: 50%; transform: translateX(-50%);
+  background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12);
+  color: rgba(255,255,255,.6); font-size: .55rem;
+  width: 22px; height: 22px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  z-index: 2;
+  transition: background .2s, color .2s;
+}
+.temp-arrow:hover { background: rgba(255,255,255,.2); color: white; }
+.temp-up { top: 6px; }   /* Up arrow position */
+.temp-dn { bottom: 6px; } /* Down arrow position */
+
+/* Small hint below ring */
+.temp-hint {
+  text-align: center; font-size: .58rem;
+  color: rgba(255,255,255,.25); letter-spacing: .06em;
+  margin-top: .3rem; margin-bottom: .2rem;
+}
+
+/* ── Device Tiles Grid ──
+   2-column grid of clickable control tiles.
+   Each tile shows an icon, name, and current state. */
+.device-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; margin-bottom: 1rem; }
+
+.d-tile {
+  background: rgba(255,255,255,.05); border-radius: 12px;
+  padding: .8rem .7rem; border: 1px solid rgba(255,255,255,.08);
+  transition: background .25s, border-color .25s, transform .15s;
+  user-select: none;
+}
+.d-tile:active { transform: scale(.95); } /* Press feedback */
+
+/* Active (on) state — brighter background */
+.d-tile.on { background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.18); }
+
+.d-icon  { font-size: 1.1rem; margin-bottom: .3rem; }
+.d-name  { font-size: .6rem; letter-spacing: .08em; text-transform: uppercase; color: rgba(255,255,255,.45); }
+.d-state { font-family: 'Epilogue', sans-serif; font-weight: 700; font-size: .72rem; margin-top: .15rem; }
+
+.d-tile.on .d-state      { color: #6fff9e; }            /* Green when on */
+.d-tile:not(.on) .d-state { color: rgba(255,255,255,.3); } /* Dim when off */
+
+/* Lights tile — yellow glow when on */
+.d-tile#tileLights.on { background: rgba(255,235,100,.15); border-color: rgba(255,235,100,.35); }
+.d-tile#tileLights.on .d-state { color: #ffe864; }
+
+/* AC tile — orange tint when in warm mode */
+.d-tile#tileAC.on.warm-ac { background: rgba(255,140,0,.12); border-color: rgba(255,140,0,.3); }
+.d-tile#tileAC.on.warm-ac .d-state { color: #ff9a3c; }
+
+/* AC tile — blue tint in cool mode */
+.d-tile#tileAC.on:not(.warm-ac) { background: rgba(69,212,255,.1); border-color: rgba(69,212,255,.25); }
+.d-tile#tileAC.on:not(.warm-ac) .d-state { color: #45d4ff; }
+
+/* Audio tile — purple when playing */
+.d-tile#tileAudio.on { background: rgba(180,159,255,.12); border-color: rgba(180,159,255,.3); }
+.d-tile#tileAudio.on .d-state { color: #b49fff; }
+
+/* ── Energy Bar ──
+   Shows daily energy savings with an animated progress bar. */
+.energy-block { background: rgba(255,255,255,.04); border-radius: 10px; padding: .75rem; border: 1px solid rgba(255,255,255,.07); }
+.e-head { display: flex; justify-content: space-between; font-size: .65rem; margin-bottom: .5rem; }
+.e-head span:first-child { color: rgba(255,255,255,.4); letter-spacing: .06em; }
+.e-head span:last-child  { color: #6fff9e; font-weight: 700; }
+.e-bar  { height: 4px; background: rgba(255,255,255,.08); border-radius: 100px; overflow: hidden; }
+
+/* Bar fill animates from 0 to 68% on load */
+.e-fill {
+  height: 100%; width: 68%;
+  background: linear-gradient(90deg, #6fff9e, #45d4ff);
+  border-radius: 100px;
+  animation: fillup 1.6s ease-out forwards;
+}
+@keyframes fillup { from { width: 0 } to { width: 68% } }
+
+/* Hint text at very bottom of mockup */
+.mockup-hint {
+  text-align: center; font-size: .58rem; letter-spacing: .08em;
+  color: rgba(255,255,255,.22); margin-top: .75rem;
+  text-transform: uppercase;
+}
+
+/* Floating stat cards positioned around the mockup */
+.float-card {
+  position: absolute; z-index: 50; /* Above hero-bg-overlay (z-index 1) */
+  background: var(--white); color: var(--black);
+  border: 1px solid var(--line);
+  border-radius: 14px; padding: .9rem 1.1rem;
+  box-shadow: 0 12px 32px rgba(0,0,0,.12);
+  font-size: .75rem;
+}
+.float-card.top-right { top: 10%; right: 4%; }
+.float-card.bot-left  { bottom: 12%; left: 4%; }
+.float-num { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; line-height: 1; }
+.float-lbl { color: var(--mid); font-size: .65rem; letter-spacing: .08em; text-transform: uppercase; margin-top: .1rem; }
+
+
+/* ─────────────────────────────────────────────
+   06. HERO BOTTOM STRIP
+   4-column info strip at the bottom of the hero.
+───────────────────────────────────────────── */
+
+
+
+/* ─────────────────────────────────────────────
+   08. SHARED SECTION STYLES
+   Used across Features, Products, How It Works.
+───────────────────────────────────────────── */
+.sec { padding: 6rem 5vw; }
+.si  { max-width: 1280px; margin: 0 auto; } /* Inner container max-width */
+
+/* Small label above section titles e.g. "What Walgi Does" */
+.eyebrow {
+  font-size: .7rem; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--grey); display: flex; align-items: center; gap: .9rem; margin-bottom: 2.2rem;
+}
+.eyebrow::before { content: ''; width: 28px; height: 1px; background: var(--grey); } /* Decorative line */
+
+/* Large Bebas Neue section title */
+.sec-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.8rem, 5vw, 5.5rem); line-height: .93; letter-spacing: .02em; margin-bottom: 1rem; }
+.sec-sub   { color: var(--mid); font-size: 1rem; line-height: 1.72; max-width: 500px; }
+
+/* Outlined (hollow) text — used in section titles */
+.stroke { -webkit-text-stroke: 2px var(--black); color: transparent; }
+
+
+/* ─────────────────────────────────────────────
+   09. FEATURES GRID
+   3-column grid of feature cards.
+   Hovering inverts the card to black background.
+───────────────────────────────────────────── */
+.feat-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  margin-top: 4rem;
+}
+
+.feat-cell {
+  padding: 2.5rem;
+
+  transition: background .28s, color .28s;
+  position: relative; overflow: hidden;
+}
+
+/* Remove right border on last column item */
+.feat-cell:nth-child(3n) { border-right: none; }
+/* Remove bottom border on last row items */
+.feat-cell:nth-last-child(-n+3) { border-bottom: none; }
+
+/* Hover: invert colours — white text on black background */
+.feat-cell:hover                 { background: var(--black); color: var(--white); }
+.feat-cell:hover .fc-num         { color: rgba(255,255,255,.38); }
+.feat-cell:hover .fc-sub         { color: rgba(255,255,255,.38); }
+.feat-cell:hover .fc-icon        { border-color: rgba(255,255,255,.12); background: rgba(255,255,255,.06); }
+
+.fc-num  { font-family: 'Bebas Neue', sans-serif; font-size: .85rem; color: var(--grey); letter-spacing: .1em; margin-bottom: 1.4rem; transition: color .28s; }
+.fc-icon { width: 46px; height: 46px; border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; font-size: 1.35rem; margin-bottom: 1.1rem; transition: border-color .28s, background .28s; }
+.feat-cell h3 { font-weight: 700; font-size: 1.05rem; margin-bottom: .55rem; }
+.fc-sub  { color: var(--mid); font-size: .87rem; line-height: 1.65; transition: color .28s; }
+
+
+/* ─────────────────────────────────────────────
+   10. PRODUCTS LIST
+   Horizontal row layout for each product.
+   Columns: number | name | description | arrow
+───────────────────────────────────────────── */
+.products-list { margin-top: 4rem; display: flex; flex-direction: column; }
+
+.prod-row {
+  display: grid; grid-template-columns: 80px 1fr 1fr auto;
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+  transition: background .25s;
+}
+.prod-row:last-child { border-bottom: none; }
+
+/* Hover: entire row flips to black */
+.prod-row:hover                       { background: var(--black); color: var(--white); }
+.prod-row:hover .pr-cat               { color: rgba(255,255,255,.4); }
+.prod-row:hover .pr-desc              { color: rgba(255,255,255,.4); }
+.prod-row:hover .pr-arrow             { border-color: rgba(255,255,255,.2); color: var(--white); }
+
+.pr-num   { padding: 1.8rem 1.5rem; text-align: center; font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; color: var(--grey); border-right: 1px solid var(--line); align-self: stretch; display: flex; align-items: center; justify-content: center; }
+.pr-info  { padding: 1.8rem 2rem; border-right: 1px solid var(--line); }
+.pr-cat   { font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; color: var(--grey); margin-bottom: .3rem; transition: color .25s; }
+.pr-name  { font-family: 'Epilogue', sans-serif; font-weight: 700; font-size: 1.2rem; }
+.pr-desc  { padding: 1.8rem 2rem; color: var(--mid); font-size: .88rem; line-height: 1.65; border-right: 1px solid var(--line); transition: color .25s; }
+.pr-price { display: none; } /* Price hidden — not shown at launch */
+.pr-action { padding: 1.8rem 2rem; display: flex; flex-direction: column; align-items: flex-end; gap: .6rem; }
+
+/* Arrow button on the right of each product row */
+.pr-arrow { width: 36px; height: 36px; border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; font-size: 1rem; transition: border-color .25s, color .25s; }
+
+
+/* ─────────────────────────────────────────────
+   11. HOW IT WORKS
+   Two-column layout: steps on left, big stat on right.
+───────────────────────────────────────────── */
+.how-wrap  { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin-top: 4rem; }
+.how-left  { padding-right: 4rem; }
+.how-steps { margin-top: 3rem; }
+
+.h-step {
+  display: flex; gap: 1.8rem; padding: 1.8rem 0;
+  align-items: flex-start;
+}
+.h-step:first-child { padding-top: 0; }
+.h-step:last-child  { border-bottom: none; }
+
+/* Step number — faint until hovered */
+.h-n { font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; color: rgba(11,11,11,.12); line-height: 1; min-width: 2.5rem; transition: color .22s; }
+.h-step:hover .h-n { color: var(--black); } /* Darken number on hover */
+
+.h-body h4 { font-weight: 700; font-size: 1rem; margin-bottom: .3rem; }
+.h-body p  { color: var(--mid); font-size: .87rem; line-height: 1.65; }
+
+/* Right side — very large stat number */
+.how-right { padding-left: 4rem; display: flex; flex-direction: column; justify-content: center; }
+.how-big   { font-family: 'Bebas Neue', sans-serif; font-size: clamp(5rem, 8vw, 9rem); line-height: .88; margin-bottom: 1.5rem; }
+.how-right p { color: var(--mid); font-size: .98rem; line-height: 1.72; max-width: 360px; }
+
+
+/* ─────────────────────────────────────────────
+   12. EARLY ACCESS CTA
+   Full-width dark section with email capture form.
+───────────────────────────────────────────── */
+.cta-sec {
+  padding: 8rem 5vw;
+  background: var(--black); color: var(--white);
+  position: relative; overflow: hidden;
+  text-align: center;
+}
+
+/* Subtle grid overlay on CTA background */
+.cta-sec::before {
+  content: ''; position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+  background-size: 55px 55px;
+}
+
+/* "Early Access Open" badge */
+.cta-label {
+  display: inline-flex; align-items: center; gap: .5rem;
+  font-size: .7rem; letter-spacing: .15em; text-transform: uppercase;
+  color: rgba(255,255,255,.45); border: 1px solid rgba(255,255,255,.12);
+  padding: .35rem .9rem; margin-bottom: 2rem; position: relative; z-index: 1;
+}
+
+.cta-sec h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(3.5rem, 7vw, 9rem); line-height: .9; letter-spacing: .02em;
+  position: relative; z-index: 1; margin-bottom: 1.5rem;
+}
+.cta-sec h2 .s { -webkit-text-stroke: 2px rgba(255,255,255,.3); color: transparent; }
+.cta-sec p { color: rgba(255,255,255,.42); font-size: 1rem; max-width: 420px; margin: 0 auto 2.5rem; position: relative; z-index: 1; line-height: 1.7; }
+
+/* Email input + submit button row */
+.email-form {
+  display: flex; max-width: 480px; margin: 0 auto;
+  position: relative; z-index: 1; border: 1px solid rgba(255,255,255,.15);
+}
+.email-form input {
+  flex: 1; background: rgba(255,255,255,.05); color: var(--white);
+  border: none; outline: none; padding: 1rem 1.4rem;
+  font-family: 'Epilogue', sans-serif; font-size: .88rem; font-weight: 300;
+}
+.email-form input::placeholder { color: rgba(255,255,255,.3); }
+.email-form button {
+  background: var(--white); color: var(--black);
+  font-family: 'Epilogue', sans-serif; font-weight: 700;
+  font-size: .78rem; letter-spacing: .1em; text-transform: uppercase;
+  padding: 1rem 1.6rem; border: none;
+  transition: background .22s; white-space: nowrap;
+}
+.email-form button:hover { background: rgba(255,255,255,.85); }
+.email-note { font-size: .7rem; color: rgba(255,255,255,.28); margin-top: .9rem; position: relative; z-index: 1; }
+
+
+/* ─────────────────────────────────────────────
+   13. FOOTER
+   Orange footer matching Walgi brand.
+───────────────────────────────────────────── */
+footer {
+  background: var(--black);
+  color: var(--white);
+  padding: 0 5vw 0;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle texture overlay */
+footer::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: radial-gradient(circle at 80% 20%, rgba(255,255,255,.06) 0%, transparent 60%),
+                    radial-gradient(circle at 10% 80%, rgba(0,0,0,.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* ── MAIN GRID ── */
+.foot-top {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  padding: 3rem 0;
+}
+
+.foot-social { text-align: right; }
+
+/* Logo row */
+.foot-logo-wrap {
+  display: flex; align-items: center; gap: .7rem; margin-bottom: 1rem;
+}
+.foot-logo-icon {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: var(--white); color: var(--black);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; font-weight: 700; flex-shrink: 0;
+}
+.foot-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2rem; letter-spacing: .07em; color: var(--white);
+}
+.foot-brand-desc {
+  color: rgba(255,255,255,.7); font-size: .87rem;
+  line-height: 1.7; margin-bottom: 1.8rem;
+}
+
+/* Address */
+.foot-address-block { margin-top: .5rem; }
+.foot-col-label {
+  font-size: .65rem; letter-spacing: .18em; text-transform: uppercase;
+  color: rgba(255,255,255,.5); margin-bottom: .5rem; font-weight: 600;
+}
+.foot-address-text {
+  color: rgba(255,255,255,.8); font-size: .87rem; line-height: 1.8;
+}
+
+/* Link columns */
+.foot-col h5 {
+  font-weight: 700; font-size: .68rem; letter-spacing: .14em;
+  text-transform: uppercase; color: rgba(255,255,255,.5);
+  margin-bottom: 1.2rem;
+}
+.foot-col ul  { list-style: none; }
+.foot-col li  { margin-bottom: .65rem; }
+.foot-col a   {
+  color: rgba(255,255,255,.8); text-decoration: none;
+  font-size: .87rem; transition: color .2s;
+}
+.foot-col a:hover { color: var(--white); }
+
+/* ── BOTTOM BAR ── */
+.foot-bottom {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 1.5rem 0;
+  color: rgba(255,255,255,.45); font-size: .77rem;
+  position: relative; z-index: 1;
+}
+.foot-bottom a { color: rgba(255,255,255,.45); text-decoration: none; transition: color .2s; }
+.foot-bottom a:hover { color: var(--white); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .foot-top { flex-direction: column; gap: 2rem; }
+  .foot-social { text-align: left; }
+}
+
+
+/* ─────────────────────────────────────────────
+   14. DARK MODE OVERRIDES
+   Applied when <body> has class 'dark-mode'.
+   Triggered by clicking the 💡 Lights tile in the mockup.
+   Every element that uses hardcoded colours needs
+   an override here — CSS variables alone aren't enough
+   because many colours are hardcoded rgba values.
+───────────────────────────────────────────── */
+body.dark-mode { background: #111110; color: #f0eeea;}
+body.dark-mode .logo            { color: #f0eeea; }
+body.dark-mode .logo-img-light  { display: none; }
+body.dark-mode .logo-img-dark   { display: block; }
+
+/* Navigation */
+body.dark-mode nav              { background: #111110; border-bottom-color: rgba(255,255,255,.08); }
+body.dark-mode .logo            { color: #f0eeea; }
+body.dark-mode .nav-tag         { color: #6e6c68; border-color: rgba(255,255,255,.1); }
+body.dark-mode .nav-cta         { background: #f0eeea; color: #111110; border-color: #f0eeea; }
+body.dark-mode .nav-cta:hover   { background: transparent; color: #f0eeea; }
+
+/* Hero */
+body.dark-mode .hero-h1              { color: #f0eeea; }
+body.dark-mode .hero-h1 .stroke      { -webkit-text-stroke-color: #f0eeea; color: transparent; }
+body.dark-mode .hero-desc            { color: #7a7875; }
+body.dark-mode .launch-pill          { border-color: rgba(255,255,255,.2); color: #f0eeea; }
+body.dark-mode .launch-dot           { background: #f0eeea; }
+body.dark-mode .btn-fill             { background: #f0eeea; color: #111110; border-color: #f0eeea; }
+body.dark-mode .btn-fill:hover       { background: transparent; color: #f0eeea; }
+body.dark-mode .btn-ghost            { border-color: rgba(255,255,255,.25); color: #f0eeea; }
+body.dark-mode .btn-ghost:hover      { background: #f0eeea; color: #111110; }
+body.dark-mode .float-card           { background: #1c1c1a; color: #f0eeea; border-color: rgba(255,255,255,.1); }
+body.dark-mode .float-lbl            { color: #6e6c68; }
+
+/* Hero grid background */
+body.dark-mode .hero-right::before {
+  background-image:
+    linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px);
+}
+
+/* Strip */
+body.dark-mode .hero-strip           { border-top-color: rgba(255,255,255,.08); }
+body.dark-mode .strip-cell           { border-right-color: rgba(255,255,255,.08); }
+body.dark-mode .strip-text-label     { color: #5a5855; }
+body.dark-mode .strip-text-val       { color: #f0eeea; }
+
+/* Sections */
+body.dark-mode .sec                  { border-bottom-color: rgba(255,255,255,.08); }
+body.dark-mode .eyebrow              { color: #5a5855; }
+body.dark-mode .eyebrow::before      { background: #3a3835; }
+body.dark-mode .sec-title            { color: #f0eeea; }
+body.dark-mode .sec-title .stroke    { -webkit-text-stroke-color: #f0eeea; color: transparent; }
+body.dark-mode .sec-sub              { color: #7a7875; }
+
+/* Features */
+body.dark-mode .feat-grid            { border-color: rgba(255,255,255,.08); }
+body.dark-mode .feat-cell            { border-right-color: rgba(255,255,255,.08); border-bottom-color: rgba(255,255,255,.08); }
+body.dark-mode .fc-num               { color: #3a3835; }
+body.dark-mode .fc-icon              { border-color: rgba(255,255,255,.08); }
+body.dark-mode .feat-cell h3         { color: #f0eeea; }
+body.dark-mode .fc-sub               { color: #7a7875; }
+body.dark-mode .feat-cell:hover      { background: #f0eeea; color: #111110; }
+body.dark-mode .feat-cell:hover .fc-num  { color: rgba(11,11,11,.3); }
+body.dark-mode .feat-cell:hover .fc-sub  { color: rgba(11,11,11,.55); }
+
+/* Products */
+body.dark-mode .products-list        { border-color: rgba(255,255,255,.08); }
+body.dark-mode .prod-row             { border-bottom-color: rgba(255,255,255,.08); }
+body.dark-mode .pr-num               { color: #3a3835; border-right-color: rgba(255,255,255,.08); }
+body.dark-mode .pr-info              { border-right-color: rgba(255,255,255,.08); }
+body.dark-mode .pr-cat               { color: #5a5855; }
+body.dark-mode .pr-name              { color: #f0eeea; }
+body.dark-mode .pr-desc              { color: #7a7875; border-right-color: rgba(255,255,255,.08); }
+body.dark-mode .pr-arrow             { border-color: rgba(255,255,255,.12); color: #f0eeea; }
+body.dark-mode .prod-row:hover       { background: #f0eeea; color: #111110; }
+body.dark-mode .prod-row:hover .pr-cat   { color: rgba(11,11,11,.5); }
+body.dark-mode .prod-row:hover .pr-desc  { color: rgba(11,11,11,.5); }
+body.dark-mode .prod-row:hover .pr-num   { color: rgba(11,11,11,.3); }
+body.dark-mode .prod-row:hover .pr-arrow { border-color: rgba(11,11,11,.2); color: #111110; }
+
+/* How It Works */
+body.dark-mode .how-left             { border-right-color: rgba(255,255,255,.08); }
+body.dark-mode .h-step               { border-bottom-color: rgba(255,255,255,.08); }
+body.dark-mode .h-n                  { color: rgba(255,255,255,.08); }
+body.dark-mode .h-step:hover .h-n    { color: rgba(255,255,255,.5); }
+body.dark-mode .h-body h4            { color: #f0eeea; }
+body.dark-mode .h-body p             { color: #7a7875; }
+body.dark-mode .how-big              { color: #f0eeea; }
+body.dark-mode .how-big .stroke      { -webkit-text-stroke-color: #f0eeea; color: transparent; }
+body.dark-mode .how-right p          { color: #7a7875; }
+
+/* Footer */
+body.dark-mode footer                { background: #0a0a09; }
+body.dark-mode .foot-logo            { color: #f0eeea; }
+body.dark-mode .foot-brand p         { color: rgba(240,238,234,.38); }
+body.dark-mode .foot-col h5          { color: rgba(240,238,234,.3); }
+body.dark-mode .foot-col a           { color: rgba(240,238,234,.55); }
+body.dark-mode .foot-col a:hover     { color: #f0eeea; }
+body.dark-mode .foot-top             { border-bottom-color: rgba(255,255,255,.07); }
+body.dark-mode .foot-bottom          { color: rgba(240,238,234,.25); }
+
+/* Float cards — glassy dark style at night */
+body.dark-mode .float-card {
+  background: rgba(15,15,20,0.7);
+  color: #f0eeea;
+  border-color: rgba(255,255,255,.12);
+  backdrop-filter: blur(10px);
+}
+body.dark-mode .float-lbl { color: rgba(255,255,255,.45); }
+
+
+/* ─────────────────────────────────────────────
+   15. TEMPERATURE THEME — WARM & COOL
+   Applied via JS when temp goes above 24° (warm)
+   or below 21° (cool). Classes added to <body>:
+     body.temp-warm = orange/amber tint across the site
+     body.temp-cool = blue/cyan tint across the site
+
+   body::after creates a translucent colour overlay
+   on top of all content to give the tinted feel.
+───────────────────────────────────────────── */
+
+/* Full-page tint overlay using ::after pseudo-element */
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  pointer-events: none; z-index: 998;
+  background: transparent;
+  transition: background .7s ease;
+}
+body.temp-warm::after { background: rgba(255, 120, 20, 0.07); } /* Warm orange overlay */
+body.temp-cool::after { background: rgba(30, 180, 255, 0.07);  } /* Cool blue overlay */
+
+/* ── Warm theme accents ── */
+body.temp-warm nav   { border-bottom-color: rgba(255,140,0,.15); }
+body.temp-warm .marquee-wrap { background: #1a0e00; }
+body.temp-warm .launch-pill  { border-color: rgba(255,140,0,.5); color: #b35f00; }
+body.temp-warm .hero-h1 .stroke { -webkit-text-stroke-color: #cc6a00; }
+body.temp-warm .btn-fill         { background: #cc6a00; border-color: #cc6a00; }
+body.temp-warm .btn-fill:hover   { background: transparent; color: #cc6a00; }
+body.temp-warm .btn-ghost        { border-color: #cc6a00; color: #cc6a00; }
+body.temp-warm .nav-cta          { background: #cc6a00; border-color: #cc6a00; }
+body.temp-warm .eyebrow          { color: #cc6a00; }
+body.temp-warm .eyebrow::before  { background: #cc6a00; }
+body.temp-warm .sec-title .stroke  { -webkit-text-stroke-color: #cc6a00; }
+body.temp-warm .how-big .stroke    { -webkit-text-stroke-color: #cc6a00; }
+body.temp-warm .mock-dot           { background: #ff9a3c; }
+body.temp-warm .cta-sec            { background: #1a0900; }
+body.temp-warm footer              { background: #110800; }
+
+/* ── Cool theme accents ── */
+body.temp-cool nav   { border-bottom-color: rgba(69,212,255,.15); }
+body.temp-cool .marquee-wrap { background: #001a22; }
+body.temp-cool .launch-pill  { border-color: rgba(69,212,255,.5); color: #0077a8; }
+body.temp-cool .hero-h1 .stroke { -webkit-text-stroke-color: #0099cc; }
+body.temp-cool .btn-fill         { background: #0088bb; border-color: #0088bb; }
+body.temp-cool .btn-fill:hover   { background: transparent; color: #0088bb; }
+body.temp-cool .btn-ghost        { border-color: #0088bb; color: #0088bb; }
+body.temp-cool .nav-cta          { background: #0088bb; border-color: #0088bb; }
+body.temp-cool .eyebrow          { color: #0088bb; }
+body.temp-cool .eyebrow::before  { background: #0088bb; }
+body.temp-cool .sec-title .stroke  { -webkit-text-stroke-color: #0088bb; }
+body.temp-cool .how-big .stroke    { -webkit-text-stroke-color: #0088bb; }
+body.temp-cool .mock-dot           { background: #45d4ff; }
+body.temp-cool .cta-sec            { background: #001520; }
+body.temp-cool footer              { background: #001018; }
+
+/* ── Dark mode + warm/cool combined overrides ── */
+body.dark-mode.temp-warm .launch-pill  { color: #ffaa55; border-color: rgba(255,140,0,.5); }
+body.dark-mode.temp-cool  .launch-pill { color: #45d4ff; border-color: rgba(69,212,255,.5); }
+body.dark-mode.temp-warm .hero-h1 .stroke    { -webkit-text-stroke-color: #ff9a3c; }
+body.dark-mode.temp-cool  .hero-h1 .stroke   { -webkit-text-stroke-color: #45d4ff; }
+body.dark-mode.temp-warm .sec-title .stroke  { -webkit-text-stroke-color: #ff9a3c; }
+body.dark-mode.temp-cool  .sec-title .stroke { -webkit-text-stroke-color: #45d4ff; }
+body.dark-mode.temp-warm .how-big .stroke    { -webkit-text-stroke-color: #ff9a3c; }
+body.dark-mode.temp-cool  .how-big .stroke   { -webkit-text-stroke-color: #45d4ff; }
+body.dark-mode.temp-warm .eyebrow  { color: #ff9a3c; }
+body.dark-mode.temp-cool  .eyebrow { color: #45d4ff; }
+body.dark-mode.temp-warm footer  { background: #110800; }
+body.dark-mode.temp-cool  footer { background: #001018; }
+
+
+/* ─────────────────────────────────────────────
+   16. GATE OVERLAY
+   Two dark panels that slide in from left and right
+   to "lock" the website. Controlled by JS via
+   the .locked class on #gateOverlay.
+
+   The gate panels are purely visual (pointer-events: none)
+   so they never block clicks on the mockup or unlock button.
+───────────────────────────────────────────── */
+.gate-overlay {
+  position: fixed; inset: 0; z-index: 350; /* Above hero-right (50), below mockup (400) */
+  display: flex; align-items: stretch;
+  pointer-events: none; /* Never intercept clicks */
+}
+
+/* Individual left and right gate panel */
+.gate-panel {
+  flex: 1; height: 100%;
+  background: #111110;
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+  transition: transform 1s cubic-bezier(.77,0,.18,1); /* Smooth slide animation */
+  pointer-events: none;
+}
+
+/* Starting position — panels are off-screen */
+.gate-panel.gate-left  { transform: translateX(-100%); border-right: 2px solid #2a2a28; }
+.gate-panel.gate-right { transform: translateX(100%);  border-left:  2px solid #2a2a28; }
+
+/* When locked — slide panels into view */
+.gate-overlay.locked .gate-panel.gate-left  { transform: translateX(0); }
+.gate-overlay.locked .gate-panel.gate-right { transform: translateX(0); }
+
+/* Vertical iron bars on each gate panel */
+.gate-bars { display: flex; gap: 18px; height: 100%; align-items: stretch; padding: 0 24px; }
+.gate-bar {
+  width: 8px;
+  background: linear-gradient(180deg, #3a3a38 0%, #222220 50%, #3a3a38 100%);
+  border-radius: 4px; position: relative;
+}
+
+/* Decorative rivets on each bar */
+.gate-bar::before, .gate-bar::after {
+  content: '';
+  position: absolute; left: 50%; transform: translateX(-50%);
+  width: 14px; height: 14px; background: #4a4a48; border-radius: 50%;
+}
+.gate-bar::before { top: 18%; }
+.gate-bar::after  { top: 78%; }
+
+/* Horizontal crossbar in the middle of the gate */
+.gate-cross-h {
+  position: absolute; top: 50%; left: 0; right: 0; height: 10px;
+  background: linear-gradient(90deg, #2a2a28, #444442, #2a2a28);
+  transform: translateY(-50%);
+  box-shadow: 0 2px 8px rgba(0,0,0,.5);
+}
+
+/* Decorative repeating spike pattern at top of each panel */
+.gate-panel::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 6px;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0px, transparent 20px,
+    #3a3a38 20px, #3a3a38 28px
+  );
+}
+
+/* ── Gate Locked Message ──
+   Separate fixed element — NOT inside the gate panels.
+   Always above everything (z-index: 9999).
+   Hidden by default, shown after gate closes. */
+.gate-message {
+  position: fixed; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  text-align: center; color: #f0eeea;
+  pointer-events: none; /* Disabled until gate is fully closed */
+  opacity: 0;
+  transition: opacity .4s ease .6s; /* Fade in 600ms after locking */
+  white-space: nowrap;
+}
+/* .visible class added by JS after gate slides in */
+.gate-message.visible { opacity: 1; pointer-events: all; }
+
+.gate-lock-icon { font-size: 2.5rem; margin-bottom: .75rem; animation: blink 2s ease-in-out infinite; }
+.gate-msg-title { font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; letter-spacing: .08em; line-height: 1; margin-bottom: .5rem; }
+.gate-msg-sub   { font-family: 'Epilogue', sans-serif; font-size: .82rem; color: rgba(255,255,255,.4); letter-spacing: .06em; margin-bottom: 1.5rem; }
+
+/* Unlock button inside the gate message */
+.gate-unlock-btn {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,.25); color: #f0eeea;
+  font-family: 'Epilogue', sans-serif; font-weight: 600;
+  font-size: .8rem; letter-spacing: .1em; text-transform: uppercase;
+  padding: .75rem 1.8rem;
+  transition: background .22s, border-color .22s;
+}
+.gate-unlock-btn:hover { background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.5); }
+
+
+/* ─────────────────────────────────────────────
+   MEDIA GALLERY SECTION
+   Layout:
+   - One large featured video with custom play button
+   - Image grid: large left + 2 stacked right + full-width bottom
+───────────────────────────────────────────── */
+
+/* ── Featured Video ── */
+.media-video-wrap {
+  position: relative;
+  width: 100%;
+  margin-top: 3.5rem;
+  border: 1px solid var(--line);
+  overflow: hidden;
+  background: #0a0a09;
+  /* 16:9 aspect ratio */
+  aspect-ratio: 16 / 9;
+}
+
+.media-video {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  opacity: 0.85;
+  transition: opacity .3s;
+}
+.media-video.playing { opacity: 1; }
+
+/* Custom play button — centred over the video */
+.media-play-btn {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 1rem;
+  background: rgba(0,0,0,.35);
+  border: none;
+  transition: background .25s;
+}
+.media-play-btn:hover { background: rgba(0,0,0,.2); }
+
+/* Hide play button once video is playing */
+.media-play-btn.hidden { display: none; }
+
+.play-icon {
+  width: 72px; height: 72px;
+  background: var(--white); color: var(--black);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.6rem;
+  transition: transform .2s, background .2s;
+}
+.media-play-btn:hover .play-icon { transform: scale(1.08); }
+
+.play-label {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.1rem; letter-spacing: .12em;
+  color: var(--white);
+}
+
+/* Small tag bottom-left of video */
+.media-video-tag {
+  position: absolute; bottom: 1rem; left: 1rem;
+  font-size: .68rem; letter-spacing: .12em; text-transform: uppercase;
+  color: rgba(255,255,255,.6);
+  background: rgba(0,0,0,.45);
+  padding: .3rem .7rem; border-radius: 100px;
+}
+
+/* ── Image Grid ── */
+.media-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+/* Image wrapper — handles hover overlay */
+.media-img-wrap {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: #0a0a09;
+  aspect-ratio: 4 / 3;
+}
+
+/* Large left image — taller */
+.media-img-wrap.large { aspect-ratio: 3 / 4; }
+
+/* Full-width bottom image — spans both columns */
+.media-img-wrap.full {
+  grid-column: 1 / -1;
+  aspect-ratio: 21 / 9;
+}
+
+/* Right column stacks 2 images vertically */
+.media-grid-col {
+  display: flex; flex-direction: column; gap: 1rem;
+}
+.media-grid-col .media-img-wrap {
+  flex: 1;
+  aspect-ratio: unset;
+  min-height: 0;
+}
+
+/* The actual image */
+.media-img {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+  transition: transform .5s ease, filter .3s;
+  filter: grayscale(15%);
+}
+.media-img-wrap:hover .media-img {
+  transform: scale(1.04);
+  filter: grayscale(0%);
+}
+
+/* Caption — slides up on hover */
+.media-img-caption {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: .75rem 1rem;
+  background: linear-gradient(to top, rgba(0,0,0,.7), transparent);
+  font-family: 'Epilogue', sans-serif; font-weight: 500;
+  font-size: .82rem; letter-spacing: .04em;
+  color: rgba(255,255,255,.9);
+  transform: translateY(100%);
+  transition: transform .3s ease;
+}
+.media-img-wrap:hover .media-img-caption { transform: translateY(0); }
+
+/* Placeholder styling when no image is loaded */
+.media-img[src="image1.jpg"],
+.media-img[src="image2.jpg"],
+.media-img[src="image3.jpg"],
+.media-img[src="image4.jpg"] {
+  /* Show a patterned placeholder if image file doesn't exist */
+  background:
+    repeating-linear-gradient(
+      45deg,
+      rgba(255,255,255,.02) 0px,
+      rgba(255,255,255,.02) 1px,
+      transparent 1px,
+      transparent 10px
+    ),
+    #111110;
+  /* Use min-height so the grid cell still has height */
+  min-height: 160px;
+}
+
+/* Responsive */
+@media(max-width: 720px) {
+  .media-grid { grid-template-columns: 1fr; }
+  .media-img-wrap.large,
+  .media-img-wrap.full   { aspect-ratio: 16 / 9; }
+  .media-grid-col        { gap: 1rem; }
+}
+
+/* ─────────────────────────────────────────────
+   PLAYLIST PLAYER
+   Slides up from bottom when Audio tile is ON.
+   Hidden (translateY 100%) by default.
+───────────────────────────────────────────── */
+
+/* Player container — fixed bottom right */
+.playlist-player {
+  position: fixed;
+  bottom: 1.5rem; right: 1.5rem;
+  width: 300px;
+  background: #0f0f0e;
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 20px;
+  padding: 1.25rem;
+  z-index: 600; /* Above nav (500), below gate message (9999) */
+  transform: translateY(calc(100% + 2rem)); /* Hidden below viewport */
+  opacity: 0;
+  transition: transform .45s cubic-bezier(.4,0,.2,1), opacity .35s ease;
+  box-shadow: 0 24px 60px rgba(0,0,0,.5);
+}
+
+/* Visible state — triggered by adding .pl-visible via JS */
+.playlist-player.pl-visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* ── Header: track name + equaliser ── */
+.pl-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 1rem;
+}
+.pl-label {
+  font-size: .6rem; letter-spacing: .12em; text-transform: uppercase;
+  color: rgba(255,255,255,.3); margin-bottom: .2rem;
+}
+.pl-track-name {
+  font-family: 'Epilogue', sans-serif; font-weight: 700;
+  font-size: .9rem; color: #f0eeea;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  max-width: 190px;
+}
+
+/* Animated equaliser bars (4 bars, staggered animation) */
+.pl-eq {
+  display: flex; align-items: flex-end; gap: 3px;
+  height: 20px; opacity: 0;
+  transition: opacity .3s;
+}
+.pl-eq.active { opacity: 1; } /* Show only when playing */
+.pl-eq span {
+  width: 3px; background: #6fff9e; border-radius: 2px;
+  animation: eqBar 0.8s ease-in-out infinite alternate;
+}
+.pl-eq span:nth-child(1) { animation-delay: 0s;    animation-duration: 0.6s; }
+.pl-eq span:nth-child(2) { animation-delay: 0.15s; animation-duration: 0.8s; }
+.pl-eq span:nth-child(3) { animation-delay: 0.3s;  animation-duration: 0.5s; }
+.pl-eq span:nth-child(4) { animation-delay: 0.45s; animation-duration: 0.7s; }
+
+@keyframes eqBar {
+  from { height: 4px; }
+  to   { height: 18px; }
+}
+
+/* ── Progress bar ── */
+.pl-progress-wrap { margin-bottom: .85rem; }
+.pl-progress-bar {
+  height: 4px; background: rgba(255,255,255,.1);
+  border-radius: 100px; overflow: hidden;
+  cursor: pointer; margin-bottom: .4rem;
+}
+.pl-progress-fill {
+  height: 100%; width: 0%;
+  background: linear-gradient(90deg, #6fff9e, #45d4ff);
+  border-radius: 100px;
+  transition: width .5s linear;
+}
+.pl-times {
+  display: flex; justify-content: space-between;
+  font-size: .62rem; color: rgba(255,255,255,.3);
+}
+
+/* ── Playback controls ── */
+.pl-controls {
+  display: flex; align-items: center; gap: .6rem;
+  margin-bottom: 1rem;
+}
+.pl-btn {
+  background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.1);
+  color: #f0eeea; font-size: .95rem;
+  width: 34px; height: 34px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .2s, transform .15s;
+}
+.pl-btn:hover  { background: rgba(255,255,255,.15); }
+.pl-btn:active { transform: scale(.92); }
+
+/* Larger play/pause button */
+.pl-play {
+  width: 40px; height: 40px;
+  background: #f0eeea; color: #0f0f0e; border-color: #f0eeea;
+  font-size: 1rem;
+}
+.pl-play:hover { background: rgba(240,238,234,.85); }
+
+/* Volume slider */
+.pl-volume {
+  flex: 1; height: 3px;
+  -webkit-appearance: none; appearance: none;
+  background: rgba(255,255,255,.15); border-radius: 100px; outline: none;
+}
+.pl-volume::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px; height: 12px;
+  background: #f0eeea; border-radius: 50%;
+}
+.pl-vol-icon { font-size: .8rem; }
+
+/* ── Track list ── */
+.pl-list {
+  list-style: none;
+  display: flex; flex-direction: column; gap: .3rem;
+  max-height: 140px; overflow-y: auto;
+  /* Custom scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,.15) transparent;
+}
+.pl-list::-webkit-scrollbar      { width: 4px; }
+.pl-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,.15); border-radius: 100px; }
+
+.pl-item {
+  padding: .55rem .75rem;
+  font-size: .82rem; color: rgba(255,255,255,.5);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background .2s, color .2s;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.pl-item:hover  { background: rgba(255,255,255,.07); color: #f0eeea; }
+
+/* Active / currently playing track */
+.pl-item.active { background: rgba(111,255,158,.1); color: #6fff9e; border: 1px solid rgba(111,255,158,.2); }
+
+/* ─────────────────────────────────────────────
+   17. SCROLL REVEAL ANIMATION
+   Elements with class .rev start invisible and
+   shifted down 22px. When .vis is added by JS,
+   they fade in and slide up to their natural position.
+───────────────────────────────────────────── */
+.rev { opacity: 0; transform: translateY(22px); transition: opacity .75s ease, transform .75s ease; }
+.rev.vis { opacity: 1; transform: none; }
+
+
+/* ─────────────────────────────────────────────
+   18. RESPONSIVE / MOBILE
+   Breakpoints: 960px (tablet), 600px (mobile)
+───────────────────────────────────────────── */
+@media(max-width: 960px) {
+  /* Hero: stack columns vertically, show phone mockup below */
+  .hero-main { grid-template-columns: 1fr; }
+  .hero-right {
+    display: flex;
+    min-height: 520px;
+    padding: 2.5rem 5vw;
+    justify-content: center;
+    border-top: 1px solid var(--line);
+  }
+
+  /* Strip: 2 columns instead of 4 */
+  .hero-strip { grid-template-columns: 1fr 1fr; }
+
+  /* Features: single column */
+  .feat-grid { grid-template-columns: 1fr; }
+  .feat-cell { border-right: none !important; border-bottom: 1px solid var(--line) !important; }
+  .feat-cell:last-child { border-bottom: none !important; }
+
+  /* Products: collapse to single column */
+  .prod-row { grid-template-columns: 1fr; }
+  .pr-num, .pr-desc { display: none; }
+  .pr-info { border-right: none; }
+  .pr-action { align-items: flex-start; }
+
+  /* How It Works: stack columns */
+  .how-wrap { grid-template-columns: 1fr; }
+  .how-left { border-right: none; padding-right: 0; border-bottom: 1px solid var(--line); padding-bottom: 3rem; margin-bottom: 3rem; }
+  .how-right { padding-left: 0; }
+
+  /* Footer: 2 columns */
+  .foot-top { grid-template-columns: 1fr 1fr; }
+}
+
+@media(max-width: 600px) {
+  /* Strip: single column */
+  .hero-strip { grid-template-columns: 1fr; }
+  .strip-cell { border-right: none; border-bottom: 1px solid var(--line); }
+
+  /* Email form: stack vertically */
+  .email-form { flex-direction: column; }
+  .email-form button { padding: 1rem; }
+}
+
+/* ─────────────────────────────────────────────
+   19. 3D MODEL VIEWER SECTION
+   Full-width interactive 3D showcase using
+   Google's <model-viewer> web component.
+───────────────────────────────────────────── */
+
+/* Section wrapper */
+.sec-3d {
+  background: var(--black);
+  color: var(--white);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle background grid pattern */
+.sec-3d::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(244,243,239,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(244,243,239,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+}
+
+/* Eyebrow & headings inherit from .sec but need colour overrides on dark bg */
+.sec-3d .eyebrow {
+  color: var(--grey);
+  border-color: rgba(244,243,239,0.15);
+}
+.sec-3d .sec-title { color: var(--white); }
+.sec-3d .sec-sub   { color: var(--grey); }
+
+/* ── model-viewer wrapper ── */
+.model-viewer-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 860px;
+  margin: 3.5rem auto 0;
+  border-radius: 20px;
+  overflow: visible;
+}
+
+/* The <model-viewer> element itself */
+#walgiModel {
+  width: 100%;
+  height: 580px;
+  background: linear-gradient(135deg, #141414 0%, #1c1c1c 50%, #111 100%);
+  border-radius: 20px;
+  border: 1px solid rgba(244,243,239,0.08);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.05),
+    0 40px 80px rgba(0,0,0,0.6),
+    0 0 120px rgba(255,255,255,0.03) inset;
+  --poster-color: #141414;
+}
+
+/* Loading progress bar (slot="progress-bar") */
+.model-progress-bar {
+  width: 100%;
+  height: 3px;
+  background: rgba(255,255,255,0.08);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  border-radius: 0 0 20px 20px;
+  overflow: hidden;
+}
+.model-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #f4f3ef, #aaa);
+  transition: width 0.3s ease;
+}
+
+/* AR button (slot="ar-button") — only shown on AR-capable devices */
+.model-ar-btn {
+  position: absolute;
+  bottom: 18px;
+  right: 18px;
+  background: rgba(244,243,239,0.1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--white);
+  border: 1px solid rgba(244,243,239,0.2);
+  border-radius: 50px;
+  padding: 0.55rem 1.2rem;
+  font-family: 'Epilogue', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+  letter-spacing: 0.02em;
+}
+.model-ar-btn:hover {
+  background: rgba(244,243,239,0.18);
+  transform: translateY(-2px);
+}
+
+/* ── Controls overlay (Reset / Pause) ── */
+.model-controls {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  display: flex;
+  gap: 8px;
+  z-index: 10;
+}
+.model-ctrl-btn {
+  background: rgba(244,243,239,0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--white);
+  border: 1px solid rgba(244,243,239,0.15);
+  border-radius: 50px;
+  padding: 0.4rem 1rem;
+  font-family: 'Epilogue', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+  letter-spacing: 0.03em;
+}
+.model-ctrl-btn:hover {
+  background: rgba(244,243,239,0.16);
+  transform: translateY(-1px);
+}
+
+/* ── Floating feature tags ── */
+.model-tag {
+  position: absolute;
+  background: rgba(11,11,11,0.75);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  color: var(--white);
+  border: 1px solid rgba(244,243,239,0.12);
+  border-radius: 50px;
+  padding: 0.45rem 1.1rem;
+  font-family: 'Epilogue', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: none;
+  animation: tagFloat 3s ease-in-out infinite;
+}
+
+.model-tag-tl { top: -14px; left: 24px;   animation-delay: 0s;    }
+.model-tag-tr { top: -14px; right: 24px;  animation-delay: 0.75s; }
+.model-tag-bl { bottom: -14px; left: 24px;  animation-delay: 1.5s;  }
+.model-tag-br { bottom: -14px; right: 24px; animation-delay: 2.25s; }
+
+@keyframes tagFloat {
+  0%, 100% { transform: translateY(0px);   }
+  50%       { transform: translateY(-5px);  }
+}
+
+/* ── Dark mode: section already dark, no override needed ── */
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  #walgiModel { height: 400px; }
+  .model-tag-tl,
+  .model-tag-tr { top: -10px; }
+  .model-tag-bl,
+  .model-tag-br { bottom: -10px; }
+}
+
+@media (max-width: 480px) {
+  #walgiModel { height: 320px; border-radius: 14px; }
+  .model-tag { font-size: 0.62rem; padding: 0.35rem 0.8rem; }
+  .model-tag-tr,
+  .model-tag-br { display: none; } /* Hide right tags on very small screens */
+}
+/* Eyebrow & headings inherit from .sec but need colour overrides on dark bg */
+.sec-3d .eyebrow {
+  color: var(--grey);
+  border-color: rgba(244,243,239,0.15);
+}
+.sec-3d .sec-title { color: var(--white); }
+.sec-3d .sec-sub   { color: var(--grey); }
+
+/* ── model-viewer wrapper ── */
+.model-viewer-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 860px;
+  margin: 3.5rem auto 0;
+  border-radius: 20px;
+  overflow: visible;
+}
+
+/* The <model-viewer> element itself */
+#walgiModel {
+  width: 100%;
+  height: 580px;
+  background: linear-gradient(135deg, #141414 0%, #1c1c1c 50%, #111 100%);
+  border-radius: 20px;
+  border: 1px solid rgba(244,243,239,0.08);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.05),
+    0 40px 80px rgba(0,0,0,0.6),
+    0 0 120px rgba(255,255,255,0.03) inset;
+  --poster-color: #141414;
+}
+
+/* Loading progress bar (slot="progress-bar") */
+.model-progress-bar {
+  width: 100%;
+  height: 3px;
+  background: rgba(255,255,255,0.08);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  border-radius: 0 0 20px 20px;
+  overflow: hidden;
+}
+.model-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #f4f3ef, #aaa);
+  transition: width 0.3s ease;
+}
+
+/* AR button (slot="ar-button") — only shown on AR-capable devices */
+.model-ar-btn {
+  position: absolute;
+  bottom: 18px;
+  right: 18px;
+  background: rgba(244,243,239,0.1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--white);
+  border: 1px solid rgba(244,243,239,0.2);
+  border-radius: 50px;
+  padding: 0.55rem 1.2rem;
+  font-family: 'Epilogue', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+  letter-spacing: 0.02em;
+}
+.model-ar-btn:hover {
+  background: rgba(244,243,239,0.18);
+  transform: translateY(-2px);
+}
+
+/* ── Controls overlay (Reset / Pause) ── */
+.model-controls {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  display: flex;
+  gap: 8px;
+  z-index: 10;
+}
+.model-ctrl-btn {
+  background: rgba(244,243,239,0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--white);
+  border: 1px solid rgba(244,243,239,0.15);
+  border-radius: 50px;
+  padding: 0.4rem 1rem;
+  font-family: 'Epilogue', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+  letter-spacing: 0.03em;
+}
+.model-ctrl-btn:hover {
+  background: rgba(244,243,239,0.16);
+  transform: translateY(-1px);
+}
+
+/* ── Floating feature tags ── */
+.model-tag {
+  position: absolute;
+  background: rgba(11,11,11,0.75);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  color: var(--white);
+  border: 1px solid rgba(244,243,239,0.12);
+  border-radius: 50px;
+  padding: 0.45rem 1.1rem;
+  font-family: 'Epilogue', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: none;
+  animation: tagFloat 3s ease-in-out infinite;
+}
+
+.model-tag-tl { top: -14px; left: 24px;   animation-delay: 0s;    }
+.model-tag-tr { top: -14px; right: 24px;  animation-delay: 0.75s; }
+.model-tag-bl { bottom: -14px; left: 24px;  animation-delay: 1.5s;  }
+.model-tag-br { bottom: -14px; right: 24px; animation-delay: 2.25s; }
+
+@keyframes tagFloat {
+  0%, 100% { transform: translateY(0px);   }
+  50%       { transform: translateY(-5px);  }
+}
+
+/* ── Dark mode: section already dark, no override needed ── */
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  #walgiModel { height: 400px; }
+  .model-tag-tl,
+  .model-tag-tr { top: -10px; }
+  .model-tag-bl,
+  .model-tag-br { bottom: -10px; }
+}
+
+@media (max-width: 480px) {
+  #walgiModel { height: 320px; border-radius: 14px; }
+  .model-tag { font-size: 0.62rem; padding: 0.35rem 0.8rem; }
+  .model-tag-tr,
+  .model-tag-br { display: none; } /* Hide right tags on very small screens */
+}

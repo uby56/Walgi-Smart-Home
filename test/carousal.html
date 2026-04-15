@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Walgi Smart Gate System</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Lora:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:       #F7F6F3;
+    --surface:  #FFFFFF;
+    --border:   #E8E5E0;
+    --muted:    #9E9991;
+    --text:     #2A2722;
+    --subtext:  #6B6560;
+    --accent:   #B8860B;        /* dark goldenrod — single accent */
+    --accent-lt:#F5EDD6;
+    --radius:   14px;
+    --shadow:   0 4px 24px rgba(0,0,0,.07);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  /* iOS safe area */
+  @supports (padding-bottom: env(safe-area-inset-bottom)) {
+    footer { padding-bottom: calc(28px + env(safe-area-inset-bottom)); }
+    .mobile-nav { padding-bottom: calc(28px + env(safe-area-inset-bottom)); }
+  }
+
+  body {
+    font-family: 'Libre Baskerville', serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 6vw;
+    height: 88px;
+
+    background: rgba(247,246,243,.88);
+    backdrop-filter: blur(14px);
+  }
+  .logo {
+    display: flex; align-items: center; gap: 10px;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text);
+    text-decoration: none;
+    flex: 1;
+  }
+  .logo-icon {
+    width: 42px; height: 42px;
+    background: var(--accent);
+    border-radius: 8px;
+    display: grid; place-items: center;
+  }
+  .logo-icon svg { width: 22px; height: 22px; fill: #fff; }
+  
+  .nav-links { 
+    display: flex; 
+    gap: 40px; 
+    list-style: none; 
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+  }
+  .nav-links a {
+    font-size: 1.05rem; font-weight: 700;
+    letter-spacing: 0.5px;
+    color: var(--subtext); text-decoration: none;
+    transition: color .2s;
+    position: relative;
+  }
+  .nav-links a:hover { color: var(--accent); }
+  .nav-cta {
+    background: var(--accent); color: #fff;
+    border: none; border-radius: 8px;
+    padding: 15px 32px; font-size: 1.05rem; font-weight: 600;
+    cursor: pointer; transition: opacity .3s;
+    text-decoration: none;
+    margin-left: auto;
+  }
+  .nav-cta:hover { opacity: 1.05; }
+
+  .nav-links a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    width: 0%;
+    height: 2px;
+    background: var(--accent);
+    transition: width 0.3s ease;
+  }
+
+  .nav-links a:hover::after {
+    width: 100%;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 100px 6vw 80px;
+    position: relative; overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background:
+      radial-gradient(ellipse 60% 60% at 80% 40%, rgba(184,134,11,.08) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 50% at 20% 70%, rgba(184,134,11,.05) 0%, transparent 70%);
+  }
+  .hero-grid {
+    position: relative; z-index: 1;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 60px; align-items: center;
+    max-width: 1200px; margin: 0 auto; width: 100%;
+  }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--accent-lt); color: var(--accent);
+    border-radius: 100px; padding: 5px 14px;
+    font-size: .78rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .hero-eyebrow span { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.4rem, 4.5vw, 3.6rem);
+    font-weight: 600; line-height: 1.18;
+    color: var(--text); margin-bottom: 22px;
+  }
+  h1 em { font-style: normal; color: var(--accent); }
+  .hero p {
+    font-size: 1.05rem; color: var(--subtext);
+    max-width: 460px; margin-bottom: 36px;
+  }
+  .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--accent); color: #fff;
+    border: none; border-radius: 10px;
+    padding: 14px 30px; font-size: .9rem; font-weight: 600;
+    cursor: pointer; transition: opacity .2s; text-decoration: none;
+  }
+  .btn-primary:hover { opacity: .85; }
+  .btn-ghost {
+    background: transparent; color: var(--text);
+    border: 1.5px solid var(--border); border-radius: 10px;
+    padding: 14px 30px; font-size: .9rem; font-weight: 500;
+    cursor: pointer; transition: border-color .2s, color .2s; text-decoration: none;
+  }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* Gate illustration */
+  .hero-visual {
+    display: flex; justify-content: center; align-items: center;
+  }
+  .gate-showcase {
+    width: 100%; max-width: 420px;
+    background: var(--surface);
+    border-radius: 24px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    padding: 32px;
+    position: relative;
+  }
+  .gate-tabs {
+    display: flex; gap: 8px; margin-bottom: 24px;
+  }
+  .gate-tab {
+    flex: 1; padding: 9px; border-radius: 8px; border: none;
+    font-size: .82rem; font-weight: 600; cursor: pointer;
+    transition: all .25s;
+  }
+  .gate-tab.active { background: var(--accent); color: #fff; }
+  .gate-tab:not(.active) { background: var(--bg); color: var(--subtext); }
+
+  .gate-anim { height: 180px; position: relative; overflow: hidden; margin-bottom: 20px; }
+
+  /* Sliding gate SVG scene */
+  #sliding-scene, #swing-scene { width: 100%; height: 100%; }
+
+  .gate-meta { display: flex; gap: 10px; flex-wrap: wrap; }
+  .gate-badge {
+    display: flex; align-items: center; gap: 6px;
+    background: var(--bg); border-radius: 8px;
+    padding: 6px 12px; font-size: .78rem; color: var(--subtext);
+  }
+  .gate-badge-dot { width: 7px; height: 7px; border-radius: 50%; background: #4CAF50; }
+
+
+  /* ── SECTION SHARED ── */
+  section { padding: 90px 6vw; }
+  .section-inner { max-width: 1200px; margin: 0 auto; }
+  .section-label {
+    font-size: .75rem; font-weight: 600; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--accent);
+    margin-bottom: 10px;
+  }
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 3vw, 2.6rem);
+    font-weight: 600; line-height: 1.2;
+    color: var(--text); margin-bottom: 16px;
+  }
+  .section-sub {
+    font-size: 1rem; color: var(--subtext); max-width: 520px; margin-bottom: 52px;
+  }
+
+  /* ── PRODUCTS ── */
+  #products { background: var(--bg); }
+  .products-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 28px;
+  }
+  .product-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: box-shadow .3s, transform .3s;
+  }
+  .product-card:hover { box-shadow: 0 12px 40px rgba(0,0,0,.1); transform: translateY(-4px); }
+  .product-visual {
+    height: 220px; background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    border-bottom: 1px solid var(--border);
+    padding: 24px;
+  }
+  .product-visual svg { width: 100%; max-width: 280px; height: 160px; }
+  .product-body { padding: 28px; }
+  .product-badge {
+    display: inline-block;
+    background: var(--accent-lt); color: var(--accent);
+    border-radius: 6px; padding: 3px 10px;
+    font-size: .72rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .product-body h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem; margin-bottom: 10px;
+  }
+  .product-body p { font-size: .9rem; color: var(--subtext); margin-bottom: 20px; }
+  .product-features { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+  .product-features li {
+    font-size: .84rem; color: var(--subtext);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .product-features li::before {
+    content: '';
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent); flex-shrink: 0;
+  }
+
+  /* ── FEATURES — ROTATING CIRCLE CAROUSEL (pizza-slider style) ── */
+  #features {
+    background: var(--surface);
+    padding: 0 !important;
+    overflow: hidden;
+  }
+
+  /* The full-height slider stage */
+  .feat-slider {
+    width: 100%;
+    height: 620px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    /* Split background: accent left 50%, dark right 50% */
+    background: linear-gradient(to right, var(--accent) 50%, var(--text) 50%);
+    overflow: hidden;
+  }
+
+  /* ── Big brand label on the left (::before trick from pizza) ── */
+  .feat-slider::before {
+    content: "Smart\AFeatures";
+    white-space: pre;
+    position: absolute;
+    left: 5%;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3.2rem, 7vw, 6.5rem);
+    font-weight: 600;
+    color: rgba(255,255,255,.18);
+    line-height: 1em;
+    z-index: 1;
+    pointer-events: none;
+    letter-spacing: -.02em;
+  }
+
+  /* Section label + heading sit above the slider */
+  .feat-header {
+    padding: 52px 6vw 0;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* ── Content list (right side, fade in/out) ── */
+  .feat-list {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    z-index: 2;
+  }
+  .feat-list .feat-item {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-right: 10%;
+    opacity: 0;
+    transition: opacity 0.7s ease;
+    pointer-events: none;
+  }
+  .feat-list .feat-item.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .feat-content {
+    width: 340px;
+    text-align: right;
+    color: #fff;
+  }
+  .feat-content .feat-num-label {
+    font-size: .72rem;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.45);
+    margin-bottom: 10px;
+  }
+  .feat-content h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 12px;
+    line-height: 1.2;
+  }
+  .feat-content p {
+    font-size: .9rem;
+    color: rgba(255,255,255,.7);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+  .feat-content .feat-btn {
+    margin-top: 24px;
+    display: inline-block;
+    padding: 11px 32px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    font-size: .85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity .2s, transform .2s;
+    font-family: 'Libre Baskerville', serif;
+  }
+  .feat-content .feat-btn:hover { opacity: .85; transform: translateY(-2px); }
+
+  /* ── THE ROTATING CIRCLE ── */
+  .feat-circle {
+    position: absolute;
+    width: 580px;
+    height: 580px;
+    top: 100%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(var(--rotate, 0deg));
+    transition: transform 1.4s cubic-bezier(0.5, 0, 0.1, 1);
+    z-index: 5;
+    pointer-events: none;
+  }
+
+  .feat-circle .fc-spoke {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transform: rotate(calc(var(--i) * 60deg));   /* 6 items = 60° each */
+  }
+
+  /* The gate icon card at the top of each spoke */
+  .feat-circle .fc-spoke .fc-icon-card {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.1);
+    backdrop-filter: blur(6px);
+    border: 2px solid rgba(255,255,255,.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 20px 60px rgba(0,0,0,.35);
+  }
+  .feat-circle .fc-spoke .fc-icon-card svg {
+    width: 48px; height: 48px;
+    stroke: #fff; fill: none; stroke-width: 1.5;
+  }
+  .feat-circle .fc-spoke .fc-icon-card span {
+    font-size: .6rem;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.7);
+    text-align: center;
+    line-height: 1.3;
+    padding: 0 8px;
+  }
+
+  /* Make the active (top-most) icon card glow */
+  .feat-circle .fc-spoke:first-child .fc-icon-card {
+    background: rgba(184,134,11,.35);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px rgba(184,134,11,.2), 0 20px 60px rgba(0,0,0,.4);
+  }
+
+  /* ── Next arrow ── */
+  .feat-arrow {
+    position: absolute;
+    top: 50%;
+    right: 5%;
+    transform: translateY(-50%);
+    z-index: 10;
+  }
+  .feat-arrow button {
+    background: none;
+    border: 2px solid rgba(255,255,255,.3);
+    color: #fff;
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    font-size: 1.4rem;
+    cursor: pointer;
+    transition: .3s;
+    display: grid; place-items: center;
+  }
+  .feat-arrow button:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(184,134,11,.1);
+  }
+  .feat-arrow button svg {
+    width: 22px; height: 22px;
+    stroke: currentColor; fill: none; stroke-width: 2.5;
+  }
+
+  /* Dot indicators */
+  .feat-dots {
+    position: absolute;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 10;
+  }
+  .feat-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: rgba(255,255,255,.3);
+    border: none; cursor: pointer;
+    transition: background .3s, transform .3s;
+    padding: 0;
+  }
+  .feat-dot.active {
+    background: var(--accent);
+    transform: scale(1.4);
+  }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .feat-slider { height: 520px; }
+    .feat-circle { width: 440px; height: 440px; }
+    .feat-circle .fc-spoke .fc-icon-card { width: 110px; height: 110px; }
+    .feat-circle .fc-spoke .fc-icon-card svg { width: 38px; height: 38px; }
+    .feat-content { width: 260px; }
+  }
+  @media (max-width: 600px) {
+    .feat-slider { height: 480px; background: linear-gradient(to bottom, var(--accent) 45%, var(--text) 45%); }
+    .feat-slider::before { display: none; }
+    .feat-circle { width: 340px; height: 340px; top: 38%; left: 50%; }
+    .feat-circle .fc-spoke .fc-icon-card { width: 90px; height: 90px; }
+    .feat-circle .fc-spoke .fc-icon-card svg { width: 30px; height: 30px; }
+    .feat-list .feat-item { justify-content: center; padding-right: 0; align-items: flex-end; padding-bottom: 40px; }
+    .feat-content { width: 90%; text-align: center; }
+    .feat-arrow { right: 2%; }
+  }
+
+  /* ── HOW IT WORKS ── */
+  #how { background: var(--bg); }
+  .steps { display: flex; flex-direction: column; gap: 0; max-width: 720px; }
+  .step {
+    display: flex; gap: 28px; align-items: flex-start;
+    padding: 28px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .step:last-child { border-bottom: none; }
+  .step-num {
+    width: 44px; height: 44px; border-radius: 12px;
+    background: var(--accent); color: #fff;
+    font-weight: 700; font-size: 1rem;
+    display: grid; place-items: center; flex-shrink: 0;
+  }
+  .step-body h3 { font-size: 1rem; font-weight: 600; margin-bottom: 6px; }
+  .step-body p { font-size: .875rem; color: var(--subtext); }
+
+  /* ── TESTIMONIALS ── */
+  #testimonials { background: var(--surface); }
+  .testimonials-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
+  .tcard {
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 28px;
+  }
+  .tcard-stars { color: var(--accent); font-size: 1rem; margin-bottom: 14px; }
+  .tcard p { font-size: .9rem; color: var(--subtext); line-height: 1.7; margin-bottom: 20px; }
+  .tcard-author { display: flex; align-items: center; gap: 12px; }
+  .tcard-avatar {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--accent-lt);
+    display: grid; place-items: center;
+    font-size: .85rem; font-weight: 700; color: var(--accent);
+  }
+  .tcard-name { font-size: .88rem; font-weight: 600; }
+  .tcard-role { font-size: .78rem; color: var(--muted); }
+
+  /* ── CONTACT ── */
+  #contact { background: var(--bg); }
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
+  .contact-info h2 { margin-bottom: 14px; }
+  .contact-info p { color: var(--subtext); margin-bottom: 32px; }
+  .contact-detail {
+    display: flex; align-items: center; gap: 14px; margin-bottom: 18px;
+  }
+  .contact-icon {
+    width: 42px; height: 42px; border-radius: 10px;
+    background: var(--accent-lt);
+    display: grid; place-items: center; flex-shrink: 0;
+  }
+  .contact-icon svg { width: 18px; height: 18px; stroke: var(--accent); fill: none; stroke-width: 1.8; }
+  .contact-detail-body { font-size: .875rem; }
+  .contact-detail-body strong { display: block; color: var(--text); font-weight: 600; }
+  .contact-detail-body span { color: var(--subtext); }
+
+  .contact-form {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 36px;
+  }
+  .form-group { margin-bottom: 18px; }
+  .form-group label {
+    display: block; font-size: .8rem; font-weight: 600;
+    color: var(--subtext); margin-bottom: 7px;
+  }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%; padding: 11px 14px;
+    background: var(--bg); border: 1.5px solid var(--border);
+    border-radius: 9px; font-size: .875rem; color: var(--text);
+    font-family: 'Inter', sans-serif;
+    transition: border-color .2s; outline: none;
+  }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus { border-color: var(--accent); }
+  .form-group textarea { height: 110px; resize: vertical; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--text); color: rgba(255,255,255,.7);
+    padding: 56px 6vw 28px;
+  }
+  .footer-inner { max-width: 1200px; margin: 0 auto; }
+  .footer-top {
+    display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 40px; margin-bottom: 48px;
+  }
+  .footer-brand .logo { color: #fff; margin-bottom: 14px; display: inline-flex; }
+  .footer-brand p { font-size: .875rem; line-height: 1.7; max-width: 260px; }
+  .footer-col h4 {
+    font-size: .8rem; font-weight: 700; letter-spacing: .08em;
+    text-transform: uppercase; color: #fff; margin-bottom: 16px;
+  }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .footer-col a { font-size: .875rem; color: rgba(255,255,255,.6); text-decoration: none; transition: color .2s; }
+  .footer-col a:hover { color: var(--accent); }
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,.1);
+    padding-top: 24px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: .8rem;
+  }
+  .footer-bottom a { color: var(--accent); text-decoration: none; }
+
+  /* ── HAMBURGER BUTTON ── */
+  .nav-hamburger {
+    display: none;
+    flex-direction: column; justify-content: center; align-items: center;
+    gap: 5px;
+    width: 40px; height: 40px;
+    background: none; border: none; cursor: pointer;
+    padding: 4px; border-radius: 8px;
+    transition: background .2s;
+    z-index: 200;
+  }
+  .nav-hamburger:hover { background: var(--accent-lt); }
+  .nav-hamburger span {
+    display: block; width: 22px; height: 2px;
+    background: var(--text); border-radius: 2px;
+    transition: transform .3s, opacity .3s;
+  }
+  .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+  .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* Mobile nav drawer */
+  .mobile-nav {
+    display: none;
+    position: fixed; top: 68px; left: 0; right: 0;
+    background: rgba(247,246,243,.97);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 6vw 28px;
+    z-index: 99;
+    flex-direction: column; gap: 4px;
+    transform: translateY(-10px); opacity: 0;
+    transition: transform .25s, opacity .25s;
+  }
+  .mobile-nav.open {
+    transform: translateY(0); opacity: 1;
+  }
+  .mobile-nav a {
+    display: block; padding: 13px 16px;
+    font-size: 1rem; font-weight: 500;
+    color: var(--subtext); text-decoration: none;
+    border-radius: 10px; transition: background .2s, color .2s;
+  }
+  .mobile-nav a:hover { background: var(--accent-lt); color: var(--accent); }
+  .mobile-nav .mobile-cta {
+    display: block; margin-top: 10px; text-align: center;
+    background: var(--accent); color: #fff;
+    border-radius: 10px; padding: 14px; font-weight: 600;
+  }
+  .mobile-nav .mobile-cta:hover { opacity: .85; background: var(--accent); color: #fff; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .hero-grid { grid-template-columns: 1fr; gap: 36px; }
+    .hero-visual { display: flex; }
+    .gate-showcase { max-width: 100%; }
+    .products-grid { grid-template-columns: 1fr; }
+    /* features carousel mobile handled in carousel CSS */
+    .testimonials-grid { grid-template-columns: 1fr; }
+    .contact-grid { grid-template-columns: 1fr; gap: 36px; }
+    .footer-top { grid-template-columns: 1fr 1fr; }
+    .stats-inner { gap: 16px; }
+    .stat-num { font-size: 1.8rem; }
+  }
+
+  @media (max-width: 600px) {
+    /* Nav */
+    .nav-links { display: none; }
+    .nav-cta { display: none; }
+    .nav-hamburger { display: flex; }
+    .mobile-nav { display: flex; }
+
+    /* Hero */
+    .hero { padding: 88px 5vw 56px; }
+    h1 { font-size: 2.1rem; }
+    .hero p { font-size: .95rem; }
+    .hero-actions { flex-direction: column; }
+    .hero-actions a, .hero-actions button { width: 100%; text-align: center; }
+    .gate-showcase { padding: 20px; }
+    .gate-anim { height: 150px; }
+
+    /* Stats */
+    .stats { padding: 28px 5vw; }
+    .stats-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .stat { padding: 12px; background: var(--surface); border-radius: 12px; border: 1px solid var(--border); }
+    .stat-num { font-size: 1.7rem; }
+
+    /* Sections */
+    section { padding: 60px 5vw; }
+    h2 { font-size: 1.7rem; }
+    .section-sub { margin-bottom: 32px; }
+
+    /* Products */
+    .product-visual { height: 180px; }
+
+    /* features carousel handled via internal responsive CSS */
+
+    /* Steps */
+    .step { gap: 16px; padding: 20px 0; }
+    .step-num { width: 36px; height: 36px; font-size: .9rem; border-radius: 10px; }
+
+    /* Contact */
+    .contact-form { padding: 22px; }
+    .form-row { grid-template-columns: 1fr; }
+
+    /* Footer */
+    .footer-top { grid-template-columns: 1fr; gap: 28px; }
+    footer { padding: 40px 5vw 20px; }
+    .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
+
+    /* Testimonials */
+    .tcard { padding: 20px; }
+  }
+
+  @media (max-width: 380px) {
+    h1 { font-size: 1.85rem; }
+    .stats-inner { grid-template-columns: 1fr; }
+    .gate-tab { font-size: .75rem; padding: 8px 4px; }
+  }
+
+  /* Gate animation */
+  @keyframes slideOpen {
+    0%   { transform: translateX(0); }
+    40%  { transform: translateX(-54px); }
+    60%  { transform: translateX(-54px); }
+    100% { transform: translateX(0); }
+  }
+  @keyframes swingOpen {
+    0%   { transform-origin: left center; transform: rotateY(0deg); }
+    40%  { transform-origin: left center; transform: rotateY(-60deg); }
+    60%  { transform-origin: left center; transform: rotateY(-60deg); }
+    100% { transform-origin: left center; transform: rotateY(0deg); }
+  }
+  .sliding-panel { animation: slideOpen 3.6s ease-in-out infinite; }
+  .swing-panel  { animation: swingOpen 3.6s ease-in-out infinite; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="logo" href="#">
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24"><path d="M12 2L4 7v10l8 5 8-5V7L12 2zm0 2.3l6 3.7v8.6l-6 3.7-6-3.7V8z"/></svg>
+    </div>
+    Walgi
+  </a>
+  <ul class="nav-links">
+    <li><a href="#">Home</a></li>
+    <li><a href="#products">Products</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- MOBILE NAV DRAWER -->
+<div class="mobile-nav" id="mobileNav">
+  <a href="#" onclick="closeMenu()">Home</a>
+  <a href="#products" onclick="closeMenu()">Products</a>
+  <a href="#features" onclick="closeMenu()">Features</a>
+  <a href="#how" onclick="closeMenu()">How It Works</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid">
+    <div class="hero-content">
+      <div class="hero-eyebrow"><span></span> Smart Gate Technology</div>
+      <h1>Intelligent Gates for <em>Modern</em> Living</h1>
+      <p>Walgi delivers premium automated sliding and swing gates — engineered for security, elegance, and seamless smart-home integration.</p>
+    </div>
+    <div class="hero-visual">
+      <div class="gate-showcase">
+        <div class="gate-tabs">
+          <button class="gate-tab active" onclick="switchTab('sliding',this)">Sliding Gate</button>
+          <button class="gate-tab" onclick="switchTab('swing',this)">Swing Gate</button>
+        </div>
+        <div class="gate-anim">
+          <!-- Sliding Gate Scene -->
+          <svg id="sliding-scene" viewBox="0 0 360 160" xmlns="http://www.w3.org/2000/svg">
+            <!-- Ground -->
+            <rect x="0" y="138" width="360" height="22" fill="#E8E5E0" rx="2"/>
+            <!-- Track -->
+            <rect x="20" y="134" width="320" height="6" fill="#D4CFC8" rx="3"/>
+            <!-- Left post -->
+            <rect x="20" y="30" width="22" height="110" fill="#C8C3BA" rx="4"/>
+            <!-- Right post -->
+            <rect x="318" y="30" width="22" height="110" fill="#C8C3BA" rx="4"/>
+            <!-- Gate panel (slides left) -->
+            <g class="sliding-panel">
+              <rect x="50" y="32" width="180" height="104" fill="#F5F0E8" stroke="#D4CFC8" stroke-width="1.5" rx="3"/>
+              <!-- Slats -->
+              <line x1="50" y1="58" x2="230" y2="58" stroke="#DDD8D0" stroke-width="1"/>
+              <line x1="50" y1="84" x2="230" y2="84" stroke="#DDD8D0" stroke-width="1"/>
+              <line x1="50" y1="110" x2="230" y2="110" stroke="#DDD8D0" stroke-width="1"/>
+              <!-- Verticals -->
+              <line x1="92" y1="32" x2="92" y2="136" stroke="#DDD8D0" stroke-width="1"/>
+              <line x1="140" y1="32" x2="140" y2="136" stroke="#DDD8D0" stroke-width="1"/>
+              <line x1="188" y1="32" x2="188" y2="136" stroke="#DDD8D0" stroke-width="1"/>
+              <!-- Handle -->
+              <rect x="224" y="74" width="8" height="14" fill="#B8860B" rx="3"/>
+            </g>
+            <!-- Motor unit -->
+            <rect x="244" y="52" width="60" height="32" fill="#E0D9CF" stroke="#C8C3BA" stroke-width="1" rx="6"/>
+            <circle cx="274" cy="68" r="8" fill="#B8860B" opacity=".7"/>
+            <!-- Status light -->
+            <circle cx="352" cy="44" r="6" fill="#4CAF50"/>
+            <text x="280" y="20" font-family="Inter,sans-serif" font-size="11" fill="#9E9991" text-anchor="middle">Auto Sliding System</text>
+          </svg>
+          <!-- Swing Gate Scene -->
+          <svg id="swing-scene" viewBox="0 0 360 160" xmlns="http://www.w3.org/2000/svg" style="display:none">
+            <!-- Ground -->
+            <rect x="0" y="138" width="360" height="22" fill="#E8E5E0" rx="2"/>
+            <!-- Left post -->
+            <rect x="30" y="28" width="22" height="112" fill="#C8C3BA" rx="4"/>
+            <!-- Right post -->
+            <rect x="308" y="28" width="22" height="112" fill="#C8C3BA" rx="4"/>
+            <!-- Left swing panel -->
+            <g class="swing-panel">
+              <rect x="52" y="30" width="130" height="106" fill="#F5F0E8" stroke="#D4CFC8" stroke-width="1.5" rx="3"/>
+              <line x1="52" y1="57" x2="182" y2="57" stroke="#DDD8D0" stroke-width="1"/>
+              <line x1="52" y1="83" x2="182" y2="83" stroke="#DDD8D0" stroke-width="1"/>
+              <line x1="52" y1="110" x2="182" y2="110" stroke="#DDD8D0" stroke-width="1"/>
+              <line x1="95" y1="30" x2="95" y2="136" stroke="#DDD8D0" stroke-width="1"/>
+              <line x1="140" y1="30" x2="140" y2="136" stroke="#DDD8D0" stroke-width="1"/>
+              <rect x="175" y="74" width="8" height="14" fill="#B8860B" rx="3"/>
+            </g>
+            <!-- Right swing panel (static, mirrored look) -->
+            <rect x="184" y="30" width="124" height="106" fill="#F5F0E8" stroke="#D4CFC8" stroke-width="1.5" rx="3"/>
+            <line x1="184" y1="57" x2="308" y2="57" stroke="#DDD8D0" stroke-width="1"/>
+            <line x1="184" y1="83" x2="308" y2="83" stroke="#DDD8D0" stroke-width="1"/>
+            <line x1="184" y1="110" x2="308" y2="110" stroke="#DDD8D0" stroke-width="1"/>
+            <line x1="222" y1="30" x2="222" y2="136" stroke="#DDD8D0" stroke-width="1"/>
+            <line x1="263" y1="30" x2="263" y2="136" stroke="#DDD8D0" stroke-width="1"/>
+            <rect x="177" y="74" width="8" height="14" fill="#B8860B" rx="3"/>
+            <!-- Status -->
+            <circle cx="350" cy="42" r="6" fill="#4CAF50"/>
+            <text x="180" y="20" font-family="Inter,sans-serif" font-size="11" fill="#9E9991" text-anchor="middle">Auto Swing System</text>
+          </svg>
+        </div>
+        <div class="gate-meta">
+          <div class="gate-badge"><div class="gate-badge-dot"></div> Live Demo</div>
+          <div class="gate-badge">⚡ Auto-Open</div>
+          <div class="gate-badge">📱 App Control</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section id="products">
+  <div class="section-inner">
+    <div class="section-label">Our Products</div>
+    <h2>Choose Your Gate System</h2>
+    <p class="section-sub">Two distinct automation systems tailored to your property layout — both powered by the Walgi smart controller.</p>
+    <div class="products-grid">
+
+      <!-- Sliding Gate -->
+      <div class="product-card">
+        <div class="product-visual">
+          <svg viewBox="0 0 280 160" xmlns="http://www.w3.org/2000/svg">
+            <rect x="0" y="130" width="280" height="16" fill="#E8E5E0" rx="2"/>
+            <rect x="8" y="126" width="264" height="6" fill="#D4CFC8" rx="3"/>
+            <rect x="8" y="22" width="18" height="110" fill="#C8C3BA" rx="3"/>
+            <rect x="254" y="22" width="18" height="110" fill="#C8C3BA" rx="3"/>
+            <rect x="32" y="24" width="160" height="102" fill="#F5F0E8" stroke="#D4CFC8" stroke-width="1.5" rx="3"/>
+            <line x1="32" y1="50" x2="192" y2="50" stroke="#E0D9CF" stroke-width="1.2"/>
+            <line x1="32" y1="76" x2="192" y2="76" stroke="#E0D9CF" stroke-width="1.2"/>
+            <line x1="32" y1="102" x2="192" y2="102" stroke="#E0D9CF" stroke-width="1.2"/>
+            <line x1="72" y1="24" x2="72" y2="126" stroke="#E0D9CF" stroke-width="1.2"/>
+            <line x1="112" y1="24" x2="112" y2="126" stroke="#E0D9CF" stroke-width="1.2"/>
+            <line x1="152" y1="24" x2="152" y2="126" stroke="#E0D9CF" stroke-width="1.2"/>
+            <rect x="186" y="72" width="7" height="12" fill="#B8860B" rx="2"/>
+            <!-- Motor box -->
+            <rect x="196" y="48" width="50" height="28" fill="#E0D9CF" stroke="#C8C3BA" stroke-width="1" rx="5"/>
+            <circle cx="221" cy="62" r="7" fill="#B8860B" opacity=".65"/>
+            <text x="140" y="14" font-family="Inter" font-size="10" fill="#9E9991" text-anchor="middle">Sliding Gate System</text>
+          </svg>
+        </div>
+        <div class="product-body">
+          <div class="product-badge">Sliding</div>
+          <h3>Walgi Slide Pro</h3>
+          <p>Ideal for driveways with limited swing clearance. The panel glides smoothly on a precision track system with anti-collision technology.</p>
+          <ul class="product-features">
+            <li>Track width up to 8 metres</li>
+            <li>500 kg load capacity</li>
+            <li>Soft-start / soft-stop motor</li>
+            <li>Manual release in power cut</li>
+            <li>Smartphone & remote control</li>
+            <li>RFID & keypad entry options</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Swing Gate -->
+      <div class="product-card">
+        <div class="product-visual">
+          <svg viewBox="0 0 280 160" xmlns="http://www.w3.org/2000/svg">
+            <rect x="0" y="130" width="280" height="16" fill="#E8E5E0" rx="2"/>
+            <rect x="8" y="22" width="18" height="110" fill="#C8C3BA" rx="3"/>
+            <rect x="254" y="22" width="18" height="110" fill="#C8C3BA" rx="3"/>
+            <!-- Left panel -->
+            <rect x="28" y="24" width="110" height="102" fill="#F5F0E8" stroke="#D4CFC8" stroke-width="1.5" rx="3"/>
+            <line x1="28" y1="50" x2="138" y2="50" stroke="#E0D9CF" stroke-width="1.2"/>
+            <line x1="28" y1="76" x2="138" y2="76" stroke="#E0D9CF" stroke-width="1.2"/>
+            <line x1="28" y1="102" x2="138" y2="102" stroke="#E0D9CF" stroke-width="1.2"/>
+            <line x1="65" y1="24" x2="65" y2="126" stroke="#E0D9CF" stroke-width="1.2"/>
+            <line x1="100" y1="24" x2="100" y2="126" stroke="#E0D9CF" stroke-width="1.2"/>
+            <rect x="131" y="72" width="7" height="12" fill="#B8860B" rx="2"/>
+            <!-- Right panel -->
+            <rect x="142" y="24" width="110" height="102" fill="#F5F0E8" stroke="#D4CFC8" stroke-width="1.5" rx="3"/>
+            <line x1="142" y1="50" x2="252" y2="50" stroke="#E0D9CF" stroke-width="1.2"/>
+            <line x1="142" y1="76" x2="252" y2="76" stroke="#E0D9CF" stroke-width="1.2"/>
+            <line x1="142" y1="102" x2="252" y2="102" stroke="#E0D9CF" stroke-width="1.2"/>
+            <line x1="178" y1="24" x2="178" y2="126" stroke="#E0D9CF" stroke-width="1.2"/>
+            <line x1="215" y1="24" x2="215" y2="126" stroke="#E0D9CF" stroke-width="1.2"/>
+            <rect x="142" y="72" width="7" height="12" fill="#B8860B" rx="2"/>
+            <text x="140" y="14" font-family="Inter" font-size="10" fill="#9E9991" text-anchor="middle">Swing Gate System</text>
+          </svg>
+        </div>
+        <div class="product-body">
+          <div class="product-badge">Swing</div>
+          <h3>Walgi Swing Elite</h3>
+          <p>A classic dual-leaf design that adds grandeur to any entrance. Hydraulic or electro-mechanical actuators for whisper-quiet operation.</p>
+          <ul class="product-features">
+            <li>Single or dual leaf configurations</li>
+            <li>Leaf length up to 4 metres each</li>
+            <li>Hydraulic & electromechanical options</li>
+            <li>Obstacle detection sensors</li>
+            <li>Smartphone & remote control</li>
+            <li>Video intercom integration</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="feat-header section-inner">
+    <div class="section-label">Smart Features</div>
+    <h2>Built for Security &amp; Convenience</h2>
+    <p class="section-sub">Every Walgi gate ships with an intelligent controller packed with features that keep your property safe and connected.</p>
+  </div>
+
+  <div class="feat-slider">
+
+    <!-- Fade-in content panels (right side) -->
+    <div class="feat-list">
+
+      <div class="feat-item active">
+        <div class="feat-content">
+          <div class="feat-num-label">01 / 06</div>
+          <h3>Advanced Security</h3>
+          <p>128-bit encrypted communication, tamper alerts, and anti-lift protection ensure your gate cannot be bypassed by any external attempt.</p>
+          <button class="feat-btn">Learn More</button>
+        </div>
+      </div>
+
+      <div class="feat-item">
+        <div class="feat-content">
+          <div class="feat-num-label">02 / 06</div>
+          <h3>Mobile App Control</h3>
+          <p>Open, close, and monitor your gate from anywhere in the world via the Walgi app — available on iOS and Android with instant notifications.</p>
+          <button class="feat-btn">Learn More</button>
+        </div>
+      </div>
+
+      <div class="feat-item">
+        <div class="feat-content">
+          <div class="feat-num-label">03 / 06</div>
+          <h3>GPS Auto-Open</h3>
+          <p>Geo-fencing technology detects when your phone approaches — the gate opens automatically and silently the moment you arrive home.</p>
+          <button class="feat-btn">Learn More</button>
+        </div>
+      </div>
+
+      <div class="feat-item">
+        <div class="feat-content">
+          <div class="feat-num-label">04 / 06</div>
+          <h3>Solar Ready</h3>
+          <p>Optional solar panel integration keeps your gate powered even during extended outages — complete zero grid dependency for uninterrupted access.</p>
+          <button class="feat-btn">Learn More</button>
+        </div>
+      </div>
+
+      <div class="feat-item">
+        <div class="feat-content">
+          <div class="feat-num-label">05 / 06</div>
+          <h3>Activity Log</h3>
+          <p>Full timestamped history of every open and close event — accessible via the app or web dashboard at any time, from anywhere.</p>
+          <button class="feat-btn">Learn More</button>
+        </div>
+      </div>
+
+      <div class="feat-item">
+        <div class="feat-content">
+          <div class="feat-num-label">06 / 06</div>
+          <h3>Multi-User Access</h3>
+          <p>Grant time-limited or permanent access to family, staff, or visitors — each with their own individual PIN codes or unique app credentials.</p>
+          <button class="feat-btn">Learn More</button>
+        </div>
+      </div>
+
+    </div><!-- /feat-list -->
+
+    <!-- THE ROTATING CIRCLE (6 spokes × 60°) -->
+    <div class="feat-circle" id="featCircle">
+
+      <div class="fc-spoke" style="--i:0">
+        <div class="fc-icon-card">
+          <svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/><circle cx="12" cy="16" r="1.5" fill="white"/></svg>
+          <span>Security</span>
+        </div>
+      </div>
+
+      <div class="fc-spoke" style="--i:1">
+        <div class="fc-icon-card">
+          <svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18" stroke-linecap="round" stroke-width="2.5"/></svg>
+          <span>App Control</span>
+        </div>
+      </div>
+
+      <div class="fc-spoke" style="--i:2">
+        <div class="fc-icon-card">
+          <svg viewBox="0 0 24 24"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span>GPS Auto-Open</span>
+        </div>
+      </div>
+
+      <div class="fc-spoke" style="--i:3">
+        <div class="fc-icon-card">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+          <span>Solar Ready</span>
+        </div>
+      </div>
+
+      <div class="fc-spoke" style="--i:4">
+        <div class="fc-icon-card">
+          <svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          <span>Activity Log</span>
+        </div>
+      </div>
+
+      <div class="fc-spoke" style="--i:5">
+        <div class="fc-icon-card">
+          <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <span>Multi-User</span>
+        </div>
+      </div>
+
+    </div><!-- /feat-circle -->
+
+    <!-- Next arrow -->
+    <div class="feat-arrow">
+      <button id="featNext" aria-label="Next feature">
+        <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </div>
+
+    <!-- Dot indicators -->
+    <div class="feat-dots" id="featDots"></div>
+
+  </div><!-- /feat-slider -->
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="section-inner">
+    <div class="section-label">Process</div>
+    <h2>From Consultation to Completion</h2>
+    <p class="section-sub">Our team handles everything — site survey to final handover — in four straightforward steps.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h3>Free Site Survey</h3>
+          <p>Our engineers visit your property, assess the driveway dimensions, surface type, and power supply to recommend the ideal gate configuration.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h3>Custom Design & Quote</h3>
+          <p>We design your gate in your chosen material (steel, aluminium, timber-clad) and provide a detailed quotation with no hidden costs.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h3>Professional Installation</h3>
+          <p>Certified Walgi installers fit the gate system, connect the smart controller, test all safety sensors, and configure your mobile app.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h3>Handover & Ongoing Support</h3>
+          <p>We walk you through every feature, provide a full user manual, and back the system with a 5-year warranty plus 24/7 support.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a class="logo" href="#">
+          <div class="logo-icon"><svg viewBox="0 0 24 24" fill="white"><path d="M12 2L4 7v10l8 5 8-5V7L12 2zm0 2.3l6 3.7v8.6l-6 3.7-6-3.7V8z"/></svg></div>
+          Walgi
+        </a>
+        <p>Smart gate automation for homes and businesses across Northeast India. Precision engineered. Simply smart.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Products</h4>
+        <ul>
+          <li><a href="#products">Walgi Slide Pro</a></li>
+          <li><a href="#products">Walgi Swing Elite</a></li>
+          <li><a href="#features">Smart Controller</a></li>
+          <li><a href="#features">Solar Add-on</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Installations</a></li>
+          <li><a href="#">Warranty</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="#">User Manuals</a></li>
+          <li><a href="#">App Download</a></li>
+          <li><a href="#">Service Request</a></li>
+          <li><a href="#">FAQs</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Walgi Smart Gate Systems. All rights reserved.</span>
+      <span>Made with care in <a href="#">Guwahati, Assam</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function toggleMenu() {
+    const nav = document.getElementById('mobileNav');
+    const btn = document.getElementById('hamburger');
+    const isOpen = nav.classList.toggle('open');
+    btn.classList.toggle('open', isOpen);
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  }
+
+  function closeMenu() {
+    document.getElementById('mobileNav').classList.remove('open');
+    document.getElementById('hamburger').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // Close on outside click
+  document.addEventListener('click', function(e) {
+    const nav = document.getElementById('mobileNav');
+    const btn = document.getElementById('hamburger');
+    if (nav.classList.contains('open') && !nav.contains(e.target) && !btn.contains(e.target)) {
+      closeMenu();
+    }
+  });
+
+  function switchTab(type, btn) {
+    document.querySelectorAll('.gate-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    if (type === 'sliding') {
+      document.getElementById('sliding-scene').style.display = '';
+      document.getElementById('swing-scene').style.display = 'none';
+    } else {
+      document.getElementById('sliding-scene').style.display = 'none';
+      document.getElementById('swing-scene').style.display = '';
+    }
+  }
+
+  // ── ROTATING CIRCLE CAROUSEL (pizza-slider style) ──
+  (function() {
+    const circle  = document.getElementById('featCircle');
+    const items   = document.querySelectorAll('.feat-list .feat-item');
+    const dotsEl  = document.getElementById('featDots');
+    const total   = items.length;   // 6
+    let active    = 0;
+    let rotate    = 0;
+    let auto      = null;
+
+    // Build dots
+    items.forEach((_, i) => {
+      const d = document.createElement('button');
+      d.className = 'feat-dot' + (i === 0 ? ' active' : '');
+      d.setAttribute('aria-label', 'Go to feature ' + (i+1));
+      d.addEventListener('click', () => goTo(i, i > active ? 1 : -1));
+      dotsEl.appendChild(d);
+    });
+
+    function goTo(idx, dir) {
+      // Remove active from current
+      items[active].classList.remove('active');
+      dotsEl.children[active].classList.remove('active');
+      active = (idx + total) % total;
+      // 360° / 6 items = 60° per step
+      rotate += dir * -60;
+      circle.style.setProperty('--rotate', rotate + 'deg');
+      items[active].classList.add('active');
+      dotsEl.children[active].classList.add('active');
+      resetAuto();
+    }
+
+    document.getElementById('featNext').addEventListener('click', () => {
+      goTo(active + 1, 1);
+    });
+
+    // Touch swipe
+    let tx = 0;
+    const slider = document.querySelector('.feat-slider');
+    slider.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, {passive:true});
+    slider.addEventListener('touchend', e => {
+      const dx = e.changedTouches[0].clientX - tx;
+      if (Math.abs(dx) > 50) goTo(active + (dx < 0 ? 1 : -1), dx < 0 ? 1 : -1);
+    }, {passive:true});
+
+    
+  })();
+
+  function handleSubmit(btn) {
+    btn.textContent = '✓ Enquiry Sent!';
+    btn.style.background = '#4CAF50';
+    btn.disabled = true;
+    setTimeout(() => {
+      btn.textContent = 'Send Enquiry →';
+      btn.style.background = '';
+      btn.disabled = false;
+    }, 3000);
+  }
+</script>
+</body>
+</html>

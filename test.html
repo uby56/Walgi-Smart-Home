@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<!--
+  walgi-index.html
+  Walgi Smart Home — Main HTML Structure
+
+  Linked files:
+    style/Smart_home_style.css  — all visual styling
+    script/Smart_home_script.js  — all interactivity
+
+  Page Structure:
+  ├── <nav>            Navigation bar
+  ├── <section.hero>   Hero: headline + interactive phone mockup
+  ├── <div.marquee>    Scrolling ticker
+  ├── <section#features>  Features grid
+  ├── <section#products>  Products list
+  ├── <section#how>    How It Works
+  ├── <section#media>  Media Gallery (images + video)
+  ├── <section.cta>    Early Access email form
+  ├── <footer>         Footer links
+  ├── #gateOverlay     Full-screen gate (lock feature)
+  └── #gateMessage     Unlock prompt (shown when locked)
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Walgi — Smart Home Automation</title>
+
+  <!-- Google Fonts: Bebas Neue (headings) + Epilogue (body) -->
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Epilogue:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap" rel="stylesheet"/>
+
+  <!-- Main stylesheet -->
+  <link rel="stylesheet" href="style/test.css"/>
+
+  <!-- model-viewer — Google's 3D model web component -->
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="logo" href="#">
+  <div class="logo-box">
+    <img src="images/logo/Walgi Black.png"  alt="Walgi" class="logo-img logo-img-light"/>
+    <img src="images/logo/Walgi White.png"  alt="Walgi" class="logo-img logo-img-dark"/>
+  </div>
+</a>
+  <div class="nav-tag">Launching 2026</div>
+  <button class="nav-cta">Join Waitlist</button>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="hero-main">
+
+    <div class="hero-left">
+      <div>
+        <div class="launch-pill"><div class="launch-dot"></div> Now Launching in India</div>
+        <h1 class="hero-h1">
+          YOUR<br>
+          HOME<br>
+          <span class="stroke">THINKS</span>
+        </h1>
+      </div>
+      <div class="hero-foot">
+        <p class="hero-desc">Walgi is AI-powered smart home automation built for Indian homes — effortless control, real energy savings, total security.</p>
+        <div class="hero-btns">
+          <button class="btn-fill">Get Early Access</button>
+          <button class="btn-ghost">See How It Works</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- APP MOCKUP — INTERACTIVE -->
+    <div class="hero-right">
+
+      <!-- DAY image — visible by default (lights on) -->
+      <!-- Replace with your own: media/home-day.jpg -->
+      <img src="images/home_day.png"   alt="Home day view"   class="hero-bg-img hero-bg-day"   id="heroBgDay"/>
+      <!-- NIGHT image — shown when lights tile is turned OFF -->
+      <!-- Replace with your own: media/home-night.jpg -->
+      <img src="images/home_night.png" alt="Home night view" class="hero-bg-img hero-bg-night" id="heroBgNight"/>
+      <!-- Dark overlay so phone mockup stays readable over the image -->
+      <div class="hero-bg-overlay"></div>
+
+      <div class="mockup" id="mockup">
+        <!-- phone notch -->
+        <div class="phone-notch"><div class="notch-bar"></div></div>
+
+        <!-- HOME BACKGROUND IMAGE
+             Replace "media/home.jpg" with your actual image path.
+             The image sits behind all the UI tiles with a dark overlay. -->
+        <div class="mockup-bg">
+          <div class="mockup-bg-overlay"></div>
+        </div>
+
+        <div class="mockup-bar">
+          <div class="mockup-title">Walgi Home</div>
+          <div class="mockup-status"><div class="mock-dot"></div><span id="sysStatus">All Systems OK</span></div>
+        </div>
+
+        <!-- TEMP RING — interactive -->
+        <div class="temp-ring-wrap">
+          <div class="temp-ring" id="tempRing">
+            <button class="temp-arrow temp-up" id="tempUp" title="Warmer">▲</button>
+            <div class="temp-num" id="tempNum">22°</div>
+            <div class="temp-lbl">Living Room</div>
+            <button class="temp-arrow temp-dn" id="tempDn" title="Cooler">▼</button>
+          </div>
+          <div class="temp-hint">tap ▲▼ to adjust</div>
+        </div>
+
+        <!-- DEVICE TILES — all clickable -->
+        <div class="device-tiles">
+          <div class="d-tile on" id="tileLights" title="Toggle Lights / Site Theme">
+            <div class="d-icon">💡</div>
+            <div class="d-name">Lights</div>
+            <div class="d-state" id="stateLights">On</div>
+          </div>
+          <div class="d-tile on" id="tileAC" title="Toggle AC">
+            <div class="d-icon" id="iconAC">❄️</div>
+            <div class="d-name">AC</div>
+            <div class="d-state" id="stateAC">22°</div>
+          </div>
+          <div class="d-tile" id="tileAudio" title="Toggle Audio">
+            <div class="d-icon">🎵</div>
+            <div class="d-name">Audio</div>
+            <div class="d-state" id="stateAudio">Off</div>
+          </div>
+          <div class="d-tile on" id="tileLock" title="Lock / Unlock Site">
+            <div class="d-icon" id="iconLock">🔒</div>
+            <div class="d-name">Lock</div>
+            <div class="d-state" id="stateLock">Locked</div>
+          </div>
+        </div>
+
+        <div class="energy-block">
+          <div class="e-head"><span>Energy Today</span><span>−32% vs avg</span></div>
+          <div class="e-bar"><div class="e-fill"></div></div>
+        </div>
+
+        <!-- mode hint -->
+        <div class="mockup-hint" id="mockupHint">💡 Lights control site theme</div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+
+
+<!-- ═══ FEATURES ═══ -->
+<section class="sec" id="features">
+  <div class="si">
+    <div class="eyebrow rev">What Walgi Does</div>
+    <h2 class="sec-title rev">BUILT FOR THE<br>MODERN<br><span class="stroke">INDIAN HOME</span></h2>
+    <div class="feat-grid rev">
+      <div class="feat-cell">
+        <div class="fc-num">01</div>
+        <div class="fc-icon">⚡</div>
+        <h3>Energy Intelligence</h3>
+        <p class="fc-sub">Real-time monitoring per device. Smart scheduling cuts your electricity bill by up to 40% — without any sacrifice in comfort.</p>
+      </div>
+      <div class="feat-cell">
+        <div class="fc-num">02</div>
+        <div class="fc-icon">🔒</div>
+        <h3>Fortress Security</h3>
+        <p class="fc-sub">AI cameras detect faces, motion, and unusual activity. Smart locks, instant alerts, and remote control keep you in charge from anywhere.</p>
+      </div>
+      <div class="feat-cell">
+        <div class="fc-num">03</div>
+        <div class="fc-icon">🎙️</div>
+        <h3>App Control</h3>
+        <p class="fc-sub">Control every device by voice or the Walgi app. Works natively with Alexa, Google Home, and Siri out of the box — no extra setup.</p>
+      </div>
+      <div class="feat-cell">
+        <div class="fc-num">04</div>
+        <div class="fc-icon">🌐</div>
+        <h3>Universal Compatibility</h3>
+        <p class="fc-sub">200+ devices from all major brands — Philips, Havells, Bajaj, Samsung, Nest. Everything connects, everything cooperates.</p>
+      </div>
+      <div class="feat-cell">
+        <div class="fc-num">05ß</div>
+        <div class="fc-icon">📊</div>
+        <h3>Live Insights Dashboard</h3>
+        <p class="fc-sub">A beautiful real-time view of your home's energy use, device status, and security feed — all in one place, always accessible.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PRODUCTS ═══ -->
+<section class="sec" id="products">
+  <div class="si">
+    <div class="eyebrow rev">The Hardware</div>
+    <h2 class="sec-title rev">PRECISION<br><span class="stroke">DEVICES</span><br>FOR EVERY HOME</h2>
+    <p class="sec-sub rev">Each Walgi product is designed for Indian electrical standards, extreme ease of install, and years of reliable performance.</p>
+    <div class="products-list rev">
+      <div class="prod-row">
+        <div class="pr-num">01</div>
+        <div class="pr-info">
+          <div class="pr-cat">Hub · Controller</div>
+          <div class="pr-name">Walgi Hub Pro</div>
+        </div>
+        <div class="pr-desc">The brain of your ecosystem. Manages 200+ devices locally with ultra-low latency — no cloud dependency, total privacy.</div>
+        <div class="pr-action">
+          <div class="pr-arrow">→</div>
+        </div>
+      </div>
+      <div class="prod-row">
+        <div class="pr-num">02</div>
+        <div class="pr-info">
+          <div class="pr-cat">Security · Camera</div>
+          <div class="pr-name">Walgi Eye Cam</div>
+        </div>
+        <div class="pr-desc">4K resolution, AI face recognition, two-way audio, night vision, and motion zones — all in a discreet wall-mount design.</div>
+        <div class="pr-action">
+          <div class="pr-arrow">→</div>
+        </div>
+      </div>
+      <div class="prod-row">
+        <div class="pr-num">03</div>
+        <div class="pr-info">
+          <div class="pr-cat">Power · Energy</div>
+          <div class="pr-name">Walgi SmartStrip</div>
+        </div>
+        <div class="pr-desc">Per-outlet energy metering, surge protection, and auto-scheduling for every socket. Know exactly what's consuming your power.</div>
+        <div class="pr-action">
+          <div class="pr-arrow">→</div>
+        </div>
+      </div>
+      <div class="prod-row">
+        <div class="pr-num">04</div>
+        <div class="pr-info">
+          <div class="pr-cat">Climate · Sensor</div>
+          <div class="pr-name">Walgi Sense</div>
+        </div>
+        <div class="pr-desc">Temperature, humidity, air quality, and occupancy sensor. Feeds data to the AI to build automations that feel like magic.</div>
+        <div class="pr-action">
+          <div class="pr-arrow">→</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ HOW IT WORKS ═══ -->
+<section class="sec" id="how">
+  <div class="si">
+    <div class="eyebrow rev">Setup Process</div>
+    <div class="how-wrap">
+      <div class="how-left">
+        <h2 class="sec-title rev">RUNNING IN<br>UNDER AN<br><span class="stroke">HOUR</span></h2>
+        <div class="how-steps">
+          <div class="h-step rev">
+            <div class="h-n">01</div>
+            <div class="h-body"><h4>Choose Your Bundle</h4><p>Pick from Starter (1 room), Home (whole house), or build a custom kit from individual devices.</p></div>
+          </div>
+          <div class="h-step rev">
+            <div class="h-n">02</div>
+            <div class="h-body"><h4>Plug & Pair</h4><p>Every device is plug-and-play. The Walgi app guides you through each step in under 3 minutes per device.</p></div>
+          </div>
+          <div class="h-step rev">
+            <div class="h-n">03</div>
+            <div class="h-body"><h4>Connect Your Devices</h4><p>Add your existing smart plugs, lights, and appliances. Walgi unifies them all into a single ecosystem.</p></div>
+          </div>
+          <div class="h-step rev">
+            <div class="h-n">04</div>
+            <div class="h-body"><h4>Let Walgi Learn</h4><p>The AI watches for 7 days, learns your patterns, and starts automating. Your home gets smarter every week.</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="how-right rev">
+        <div class="how-big">NO<br>ELECTRICIAN<br><span class="stroke">NEEDED</span></div>
+        <p>Every Walgi device is engineered for the standard Indian home setup — 5-pin sockets, 220V mains, and multi-floor apartments. Just open the box and plug in.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 3D MODEL VIEWER ═══ -->
+<section class="sec sec-3d" id="model3d">
+  <div class="si">
+    <div class="eyebrow rev">3D Showcase</div>
+    <h2 class="sec-title rev">EXPLORE<br>WALGI IN<br><span class="stroke">3D</span></h2>
+    <p class="sec-sub rev">Drag to rotate. Pinch to zoom. Experience Walgi from every angle.</p>
+
+    <div class="model-viewer-wrap rev">
+      <!-- ✅ Replace "models/your-model.glb" with your actual .glb or .gltf file path -->
+      <model-viewer
+        id="walgiModel"
+        src="images/models/smartbox.glb"
+        alt="Walgi Smart Home Device 3D Model"
+        ar
+        ar-modes="webxr scene-viewer quick-look"
+        camera-controls
+        auto-rotate
+        auto-rotate-delay="1000"
+        rotation-per-second="30deg"
+        shadow-intensity="1.2"
+        shadow-softness="0.8"
+        exposure="1.1"
+        environment-image="neutral"
+        tone-mapping="commerce"
+        poster="images/video-thumbnail.png"
+        loading="eager"
+        reveal="auto"
+      >
+        <!-- Loading progress bar -->
+        <div class="model-progress-bar" slot="progress-bar">
+          <div class="model-progress-fill" id="modelProgressFill"></div>
+        </div>
+        <!-- AR button (shows only on AR-capable devices) -->
+        <button slot="ar-button" class="model-ar-btn">
+          <span>📱 View in Your Room</span>
+        </button>
+      </model-viewer>
+
+      <!-- Controls overlay -->
+      <div class="model-controls">
+        <button class="model-ctrl-btn" id="modelResetBtn" title="Reset camera">⟳ Reset</button>
+        <button class="model-ctrl-btn" id="modelAutoRotateBtn" title="Toggle auto-rotate">⏸ Pause</button>
+      </div>
+
+      <!-- Floating feature tags -->
+      <div class="model-tag model-tag-tl">Smart Control</div>
+      <div class="model-tag model-tag-tr">Ultra Compact</div>
+      <div class="model-tag model-tag-bl">Energy Smart</div>
+      <div class="model-tag model-tag-br">India Ready</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ MEDIA GALLERY ═══ -->
+<section class="sec" id="media">
+  <div class="si">
+    <div class="eyebrow rev">Media</div>
+    <h2 class="sec-title rev">SEE WALGI<br>IN <span class="stroke">ACTION</span></h2>
+    <p class="sec-sub rev">Real homes, real results. Watch how Walgi transforms everyday living.</p>
+
+    <!-- ── FEATURED VIDEO ── -->
+    <!-- Replace src="media/your-video.mp4" with your actual video file or YouTube embed -->
+    <div class="media-video-wrap rev">
+      <video
+        id="heroVideo"
+        class="media-video"
+        poster="images/video-thumbnail.png"
+        preload="none"
+      >
+        <source src="images/video/web-video.mp4" type="video/mp4"/>
+        Your browser does not support video playback.
+      </video>
+      <!-- Custom play button overlay -->
+      <button class="media-play-btn" id="videoPlayBtn">
+        <span class="play-icon">▶</span>
+        <span class="play-label">Watch the Film</span>
+      </button>
+      <!-- Video label -->
+      <div class="media-video-tag">Featured · 2:30</div>
+    </div>
+
+    <!-- ── IMAGE GRID ── -->
+    <!-- Replace src="imageN.jpg" with your actual image files -->
+    <div class="media-grid">
+
+      <!-- Large image — left -->
+      <div class="media-img-wrap large rev">
+        <img src="images/gate.png" alt="Walgi smart home entrance" class="media-img" loading="lazy"/>
+        <div class="media-img-caption">Smart Gate & Entrance</div>
+      </div>
+
+      <!-- Right column — 2 stacked images -->
+      <div class="media-grid-col">
+        <div class="media-img-wrap rev">
+          <img src="images/Dashboard.jpeg" alt="Walgi app dashboard" class="media-img" loading="lazy"/>
+          <div class="media-img-caption">App Dashboard</div>
+        </div>
+        <div class="media-img-wrap rev">
+          <img src="images/smartlight.png" alt="Walgi smart lighting" class="media-img" loading="lazy"/>
+          <div class="media-img-caption">Smart Lighting Control</div>
+        </div>
+      </div>
+
+      <!-- Full-width bottom image -->
+      <div class="media-img-wrap full rev">
+        <img src="images/smarthouse.png" alt="Walgi full home automation" class="media-img" loading="lazy"/>
+        <div class="media-img-caption">Full Home Automation</div>
+      </div>
+
+    </div><!-- /media-grid -->
+  </div>
+</section>
+
+<!-- ═══ EARLY ACCESS CTA ═══ -->
+<section class="cta-sec">
+  <div class="cta-label"><div class="launch-dot"></div> Early Access Open</div>
+  <h2>BE THE FIRST<br>TO LIVE<br><span class="s">SMARTER</span></h2>
+  <p>Join the Walgi waitlist and get exclusive early-bird pricing, priority shipping, and direct access to the founding team.</p>
+  <div class="email-form">
+    <input type="email" placeholder="Enter your email address"/>
+    <button>Join Waitlist</button>
+  </div>
+  <div class="email-note">No spam, ever. We'll only reach out when you're ready to ship.</div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+
+  <!-- MAIN FOOTER GRID -->
+  <div class="foot-top">
+
+    <!-- Brand + Address -->
+    <div class="foot-brand">
+      <div class="foot-logo-wrap">
+        <div class="foot-logo-icon">↗</div>
+        <span class="foot-logo">WALGI</span>
+      </div>
+      <p class="foot-brand-desc">Making Indian homes smarter, safer,<br>and more energy-efficient.</p>
+      <div class="foot-address-block">
+        <p class="foot-col-label">ADDRESS</p>
+        <p class="foot-address-text">📍 Walgi Private Limited, House no. 21,<br>Krisnanagar, Guwahati, 781005</p>
+      </div>
+    </div>
+
+    <!-- Follow Us — pushed to right via CSS -->
+    <div class="foot-col foot-social">
+      <h5>Follow Us</h5>
+      <ul>
+        <li><a href="#">𝔣&nbsp; Facebook</a></li>
+        <li><a href="#">in&nbsp; LinkedIn</a></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- BOTTOM BAR -->
+  <div class="foot-bottom">
+    <span>© 2025 Walgi. All rights reserved.</span>
+    <span>
+      <a href="#">Privacy Policy</a> &nbsp;·&nbsp; <a href="#">Terms of Service</a>
+    </span>
+  </div>
+
+</footer>
+
+<!-- GATE OVERLAY -->
+<div id="gateOverlay" class="gate-overlay">
+  <div class="gate-panel gate-left">
+    <div class="gate-bars">
+      <div class="gate-bar"></div><div class="gate-bar"></div>
+      <div class="gate-bar"></div><div class="gate-bar"></div>
+      <div class="gate-bar"></div><div class="gate-bar"></div>
+    </div>
+    <div class="gate-cross-h"></div>
+  </div>
+  <div class="gate-panel gate-right">
+    <div class="gate-bars">
+      <div class="gate-bar"></div><div class="gate-bar"></div>
+      <div class="gate-bar"></div><div class="gate-bar"></div>
+      <div class="gate-bar"></div><div class="gate-bar"></div>
+    </div>
+    <div class="gate-cross-h"></div>
+  </div>
+</div>
+
+<!-- Gate locked message — separate from overlay so always clickable -->
+<div class="gate-message" id="gateMessage">
+  <div class="gate-lock-icon">🔒</div>
+  <div class="gate-msg-title">Site Locked</div>
+  <div class="gate-msg-sub">Unlock the gate from the Walgi app to access</div>
+  <button class="gate-unlock-btn" id="gateUnlockBtn">Unlock Gate →</button>
+</div>
+
+<!-- ═══ PLAYLIST PLAYER ═══
+     Place your audio files in the same folder as index.html.
+     Add or remove <li> items to change the playlist.
+     The player is hidden by default and slides up when Audio tile is ON. -->
+<div id="playlistPlayer" class="playlist-player">
+
+  <!-- Current track info -->
+  <div class="pl-header">
+    <div class="pl-now">
+      <div class="pl-label">Now Playing</div>
+      <div class="pl-track-name" id="plTrackName">Track 1</div>
+    </div>
+    <!-- Animated equaliser bars when playing -->
+    <div class="pl-eq" id="plEq">
+      <span></span><span></span><span></span><span></span>
+    </div>
+  </div>
+
+  <!-- Progress bar -->
+  <div class="pl-progress-wrap">
+    <div class="pl-progress-bar" id="plProgressBar">
+      <div class="pl-progress-fill" id="plProgressFill"></div>
+    </div>
+    <div class="pl-times">
+      <span id="plCurrentTime">0:00</span>
+      <span id="plDuration">0:00</span>
+    </div>
+  </div>
+
+  <!-- Playback controls -->
+  <div class="pl-controls">
+    <button class="pl-btn" id="plPrev" title="Previous">⏮</button>
+    <button class="pl-btn pl-play" id="plPlayPause" title="Play / Pause">⏸</button>
+    <button class="pl-btn" id="plNext" title="Next">⏭</button>
+    <!-- Volume slider -->
+    <input type="range" class="pl-volume" id="plVolume" min="0" max="1" step="0.05" value="0.7" title="Volume"/>
+    <span class="pl-vol-icon">🔊</span>
+  </div>
+
+  <!-- Track list -->
+  <ul class="pl-list" id="plList">
+    <!-- Add your tracks here — update src to match your file names -->
+    <li class="pl-item active" data-src="music/Djo - 'End of Beginning' (live at Laneway 2025).mp3">🎵 Track 1</li>
+    <li class="pl-item" data-src="music/Lauv - Paris in the Rain [Official Video].mp3">🎵 Track 2</li>
+    <li class="pl-item" data-src="music/NICOLOSI - Wasted Time.mp3">🎵 Track 3</li>
+  </ul>
+</div>
+
+<!-- Hidden audio element — src is set dynamically by JS -->
+<audio id="bgAudio"></audio>
+
+<!-- Main JavaScript -->
+<script src="script/test.js"></script>
+
+</body>
+</html>
