@@ -290,47 +290,166 @@
   }
   .feat-slider::before, .feat-slider::after { display: none; }
   .feat-header { padding: 52px 6vw 0; max-width: 1200px; margin: 0 auto; }
-  .feat-list { width: 100%; height: 100%; position: relative; z-index: 2; }
-  @keyframes featPopOut {
-    0%   { opacity: 0; transform: scale(0.82) translateY(18px); }
-    60%  { opacity: 1; transform: scale(1.04) translateY(-4px); }
-    100% { opacity: 1; transform: scale(1) translateY(0); }
+  .feat-list { width: 100%; height: 100%; position: relative; z-index: 2; overflow: hidden; }
+  /* ── CAROUSEL TRANSITIONS — left slides from top, right slides from bottom ── */
+  @keyframes contentEnterFromTop {
+    0%   { transform: translateY(-110%); opacity: 0; }
+    100% { transform: translateY(0);     opacity: 1; }
   }
+  @keyframes contentExitToTop {
+    0%   { transform: translateY(0);     opacity: 1; }
+    100% { transform: translateY(-110%); opacity: 0; }
+  }
+  @keyframes contentEnterFromBottom {
+    0%   { transform: translateY(110%);  opacity: 0; }
+    100% { transform: translateY(0);     opacity: 1; }
+  }
+  @keyframes contentExitToBottom {
+    0%   { transform: translateY(0);     opacity: 1; }
+    100% { transform: translateY(110%);  opacity: 0; }
+  }
+  @keyframes visualEnterFromBottom {
+    0%   { transform: translateY(110%);  opacity: 0; }
+    100% { transform: translateY(0);     opacity: 1; }
+  }
+  @keyframes visualExitToBottom {
+    0%   { transform: translateY(0);     opacity: 1; }
+    100% { transform: translateY(110%);  opacity: 0; }
+  }
+  @keyframes visualEnterFromTop {
+    0%   { transform: translateY(-110%); opacity: 0; }
+    100% { transform: translateY(0);     opacity: 1; }
+  }
+  @keyframes visualExitToTop {
+    0%   { transform: translateY(0);     opacity: 1; }
+    100% { transform: translateY(-110%); opacity: 0; }
+  }
+
   .feat-list .feat-item {
     position: absolute; inset: 0;
-    display: flex; justify-content: center; align-items: flex-start;
-    padding: 40px 8vw 0; opacity: 0; transition: opacity 0.7s ease; pointer-events: none;
+    display: flex; justify-content: center; align-items: center;
+    padding: 0 8vw; opacity: 0; pointer-events: none;
+    gap: 60px;
+  }
+  .feat-list .feat-item.is-exiting {
+    opacity: 1;
+    pointer-events: none;
+    z-index: 1;
   }
   .feat-list .feat-item.active {
-    opacity: 1; pointer-events: auto;
-    animation: featPopOut 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+    opacity: 1; pointer-events: auto; z-index: 2;
   }
-  .feat-content { width: 560px; text-align: center; color: #fff; }
+
+  /* Left side (feat-content): enters from top, exits to top */
+  .feat-list .feat-item.is-entering .feat-content {
+    animation: contentEnterFromTop 1.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .feat-list .feat-item.is-exiting .feat-content {
+    animation: contentExitToTop 1.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  /* dir-prev reverses left side */
+  .feat-list .feat-item.is-entering.dir-prev .feat-content {
+    animation: contentEnterFromBottom 1.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .feat-list .feat-item.is-exiting.dir-prev .feat-content {
+    animation: contentExitToBottom 1.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .feat-list .feat-item.is-entering {
+    opacity: 1;
+  }
+  .feat-list .feat-item.is-entering .feat-visual {
+    animation: visualEnterFromBottom 1.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .feat-list .feat-item.is-exiting .feat-visual {
+    animation: visualExitToBottom 1.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  /* dir-prev reverses right side */
+  .feat-list .feat-item.is-entering.dir-prev .feat-visual {
+    animation: visualEnterFromTop 1.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .feat-list .feat-item.is-exiting.dir-prev .feat-visual {
+    animation: visualExitToTop 1.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  /* ── FEAT VISUAL (right-side icon panel) ── */
+  .feat-visual {
+    width: 220px; height: 220px; flex-shrink: 0;
+    border-radius: 28px;
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(12px);
+    border: 2px solid rgba(255,255,255,0.22);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 16px;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.25);
+    position: relative; overflow: hidden;
+  }
+  .feat-visual::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.18) 0%, transparent 65%);
+  }
+  .feat-visual .fv-icon {
+    width: 72px; height: 72px;
+    background: rgba(255,255,255,0.95);
+    border-radius: 20px;
+    display: grid; place-items: center;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    position: relative; z-index: 1;
+  }
+  .feat-visual .fv-icon svg {
+    width: 36px; height: 36px;
+    stroke: var(--accent); fill: none; stroke-width: 1.8;
+  }
+  .feat-visual .fv-label {
+    font-size: .75rem; font-weight: 700;
+    letter-spacing: .1em; text-transform: uppercase;
+    color: rgba(255,255,255,0.85);
+    position: relative; z-index: 1;
+    text-align: center; padding: 0 12px;
+  }
+  .feat-visual .fv-tag {
+    background: rgba(255,255,255,0.2);
+    border-radius: 50px; padding: 5px 16px;
+    font-size: .72rem; color: #fff; font-weight: 600;
+    position: relative; z-index: 1;
+    letter-spacing: .04em;
+  }
+
+  .feat-content { width: 480px; text-align: left; color: #fff; }
   .feat-content .feat-num-label {
-    font-size: .85rem; font-weight: 600; letter-spacing: .14em;
-    text-transform: uppercase; color: rgba(255,255,255,.65); margin-bottom: 14px;
+    font-size: .78rem; font-weight: 700; letter-spacing: .16em;
+    text-transform: uppercase; color: rgba(255,255,255,.55); margin-bottom: 18px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .feat-content .feat-num-label::before {
+    content: '';
+    display: inline-block; width: 32px; height: 2px;
+    background: rgba(255,255,255,.45); border-radius: 2px;
   }
   .feat-content h3 {
     font-family: 'Playfair Display', serif;
     font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 600;
-    color: #fff; margin-bottom: 16px; line-height: 1.2;
+    color: #fff; margin-bottom: 18px; line-height: 1.15;
   }
-  .feat-content p { font-size: 1.05rem; color: rgba(255,255,255,.88); line-height: 1.75; font-weight: 300; }
+  .feat-content p { font-size: 1rem; color: rgba(255,255,255,.82); line-height: 1.75; font-weight: 300; }
   .feat-content .feat-btn {
-    margin-top: 24px; display: inline-block;
-    padding: 11px 32px; background: #fff; color: var(--accent);
-    border: none; border-radius: 50px; font-size: .85rem; font-weight: 600;
+    margin-top: 28px; display: inline-block;
+    padding: 12px 34px; background: #fff; color: var(--accent);
+    border: none; border-radius: 50px; font-size: .85rem; font-weight: 700;
     cursor: pointer; transition: opacity .2s, transform .2s;
     font-family: 'Libre Baskerville', serif;
+    letter-spacing: .04em;
   }
   .feat-content .feat-btn:hover { opacity: .85; transform: translateY(-2px); }
   /* DESKTOP: circle anchored half-off bottom edge; JS sets --rotate var */
   .feat-circle {
-    position: absolute; width: 580px; height: 580px;
-    bottom: -280px; left: 50%;
+    position: absolute; width: 460px; height: 460px;
+    bottom: -240px; left: 50%;
     --rotate: 0deg;
     transform: translateX(-50%) rotate(var(--rotate));
-    transition: transform 1.4s cubic-bezier(0.5, 0, 0.1, 1);
+    transition: transform 1.6s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 5; pointer-events: none;
   }
   .feat-circle .fc-spoke .fc-icon-card { pointer-events: auto; cursor: pointer; }
@@ -341,7 +460,7 @@
   .feat-circle .fc-spoke .fc-icon-card {
     position: absolute; top: 0; left: 50%;
     transform: translateX(-50%) rotate(var(--card-rotate, 0deg));
-    width: 150px; height: 150px; border-radius: 50%;
+    width: 120px; height: 120px; border-radius: 50%;
     background: rgba(255,255,255,.1); backdrop-filter: blur(6px);
     border: 2px solid rgba(255,255,255,.2);
     display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -532,7 +651,7 @@
     .footer-cta-right { align-items: flex-start; }
     .footer-mid { grid-template-columns: 1fr; gap: 32px; }
     .feat-slider { height: 520px; }
-    .feat-circle { width: 440px; height: 440px; }
+    .feat-circle { width: 340px; height: 340px; }
     .feat-circle .fc-spoke .fc-icon-card { width: 110px; height: 110px; }
     .feat-circle .fc-spoke .fc-icon-card svg { width: 38px; height: 38px; }
     .feat-content { width: 260px; }
@@ -570,72 +689,59 @@
 
     /* ══ FEATURES — MOBILE ONLY ══════════════════════════════════ */
     .feat-slider {
-      height: 350px;
+      height: 420px;
       min-height: unset;
       flex-direction: column;
       align-items: center;
       background: var(--accent);
       overflow: hidden;
-      padding-bottom: 60px;
       position: relative;
     }
     .feat-slider::before, .feat-slider::after { display: none; }
 
-    /* Content panel — also orange */
     .feat-list {
       background: transparent;
-      position: relative;
-      width: 100%;
-      height: 220px;
-      min-height: unset;
-      flex: none;
-      order: 1; /* text FIRST (top) */
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 340px;
     }
 
-    /* Circle — in-flow at bottom */
+    /* Restore circle on mobile — in-flow at bottom */
     .feat-circle {
-      order: 2; /* circle SECOND (bottom) */
-      position: relative !important;
-      top: auto !important;
-      left: auto !important;
-      bottom: auto !important;
-      --rotate: 0deg;
-      --circle-rotate: 0deg;
-      transform: translateX(0) rotate(var(--rotate)) !important;
-      width: 260px; height: 260px;
-      margin: 0 auto;
-      flex-shrink: 0;
-      z-index: 5;
-      transition: transform 1.2s cubic-bezier(0.5, 0, 0.1, 1);
-      pointer-events: none;
       display: block !important;
+      position: absolute !important;
+      bottom: -125px !important;
+      left: 50% !important;
+      top: auto !important;
+      width: 240px !important; height: 240px !important;
+      transform: translateX(-50%) rotate(var(--rotate)) !important;
+      transition: transform 1.6s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 5;
+      pointer-events: none;
     }
 
-    /* Icon cards — counter-rotate so text always stays upright */
+    /* Icon cards */
     .feat-circle .fc-spoke .fc-icon-card {
-      width: 80px; height: 80px;
+      width: 72px !important; height: 72px !important;
       background: rgba(255,255,255,.18);
       backdrop-filter: blur(6px);
       border: 2px solid rgba(255,255,255,.45);
       box-shadow: 0 6px 20px rgba(0,0,0,.2);
       pointer-events: auto;
-      /* negate spoke angle AND circle rotation so label stays upright */
       --card-rotate: calc((var(--i) * -60deg) - var(--circle-rotate, 0deg));
       transition: transform 1.2s cubic-bezier(0.5, 0, 0.1, 1), background 0.3s, border-color 0.3s, box-shadow 0.3s;
     }
     .feat-circle .fc-spoke .fc-icon-card svg {
-      width: 26px; height: 26px;
+      width: 24px !important; height: 24px !important;
       stroke: #fff; fill: none;
     }
     .feat-circle .fc-spoke .fc-icon-card span {
-      font-size: .48rem;
+      font-size: .44rem;
       letter-spacing: .06em;
       color: #fff;
       text-align: center;
       line-height: 1.3;
     }
-
-    /* Active spoke — white highlight */
     .feat-circle .fc-spoke.fc-active .fc-icon-card {
       background: rgba(255,255,255,.95) !important;
       border-color: #fff !important;
@@ -643,64 +749,107 @@
     }
     .feat-circle .fc-spoke.fc-active .fc-icon-card svg { stroke: var(--accent) !important; }
     .feat-circle .fc-spoke.fc-active .fc-icon-card span { color: var(--accent) !important; }
+    .feat-circle::after { display: none; }
 
-    /* Central hub ring */
-    .feat-circle::after {
-      display: none;
-    }
-
-    /* Feature text — white on orange */
+    /* Feature items — side by side like desktop */
     .feat-list .feat-item {
       position: absolute; inset: 0;
       display: flex;
+      flex-direction: row;
       justify-content: center;
-      align-items: flex-start;
-      padding: 32px 8vw 0;
+      align-items: center;
+      padding: 20px 16px 16px;
+      gap: 14px;
+      overflow: visible;
     }
+
+    /* Show the visual panel on mobile, styled nicely */
+    .feat-visual {
+      display: flex !important;
+      width: 120px !important;
+      height: 120px !important;
+      min-width: 120px !important;
+      max-width: 120px !important;
+      flex-shrink: 0 !important;
+      border-radius: 20px !important;
+      gap: 8px !important;
+      background: rgba(255,255,255,0.18) !important;
+      border: 2px solid rgba(255,255,255,0.4) !important;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15) !important;
+      backdrop-filter: blur(14px) !important;
+      overflow: hidden !important;
+    }
+    .feat-visual .fv-icon {
+      width: 46px !important; height: 46px !important;
+      border-radius: 12px !important;
+      background: rgba(255,255,255,0.95) !important;
+    }
+    .feat-visual .fv-icon svg { width: 22px !important; height: 22px !important; }
+    .feat-visual .fv-label { font-size: .58rem !important; padding: 0 6px !important; color: rgba(255,255,255,0.95) !important; letter-spacing: .08em !important; }
+    .feat-visual .fv-tag {
+      font-size: .55rem !important; padding: 3px 8px !important;
+      background: rgba(255,255,255,0.22) !important;
+      border-radius: 50px !important;
+      color: #fff !important;
+    }
+
     .feat-content {
-      width: 100%;
-      text-align: center;
+      flex: 1;
+      min-width: 0;
+      text-align: left;
     }
     .feat-content .feat-num-label {
-      font-size: .78rem;
-      letter-spacing: .12em;
+      font-size: .68rem;
+      letter-spacing: .1em;
       color: rgba(255,255,255,.65);
-      margin-bottom: 8px;
+      margin-bottom: 6px;
+      justify-content: flex-start;
     }
+    .feat-content .feat-num-label::before { display: inline-block; width: 20px; }
     .feat-content h3 {
-      font-size: 1.55rem;
+      font-size: 1.2rem;
       color: #fff;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
+      line-height: 1.2;
     }
     .feat-content p {
-      font-size: .95rem;
+      font-size: .8rem;
       color: rgba(255,255,255,.82);
-      line-height: 1.65;
+      line-height: 1.55;
     }
     .feat-content .feat-btn {
-      margin-top: 18px;
-      padding: 10px 28px;
-      font-size: .82rem;
+      margin-top: 12px;
+      padding: 8px 20px;
+      font-size: .76rem;
       background: #fff;
       color: var(--accent);
     }
 
-    /* Arrows — positioned at bottom corners */
+    /* Arrows — positioned at bottom corners, above circle */
     .feat-arrow {
       top: auto;
-      bottom: 12px;
+      bottom: 10px;
       transform: none;
-      z-index: 20;
+      z-index: 30;
     }
-    .feat-arrow.feat-arrow--next { right: 4%; }
-    .feat-arrow.feat-arrow--prev { left: 4%; }
+    .feat-arrow.feat-arrow--next { right: 3%; }
+    .feat-arrow.feat-arrow--prev { left: 3%; }
     .feat-arrow button {
-      width: 44px; height: 44px;
-      border-color: rgba(255,255,255,.4);
-      color: #fff;
-      background: rgba(255,255,255,.1);
+      width: 40px !important; height: 40px !important;
+      border: 2px solid rgba(255,255,255,0.6) !important;
+      color: #fff !important;
+      background: rgba(255,255,255,0.15) !important;
+      border-radius: 50% !important;
+      display: grid !important;
+      place-items: center !important;
+      cursor: pointer !important;
+      transition: background .2s, border-color .2s !important;
     }
-    .feat-arrow button:hover { border-color: #fff; background: rgba(255,255,255,.2); }
+    .feat-arrow button:hover {
+      background: rgba(255,255,255,0.28) !important;
+      border-color: #fff !important;
+    }
+    .feat-arrow button svg { width: 18px !important; height: 18px !important; stroke: #fff !important; fill: none !important; stroke-width: 2.5 !important; }
 
     /* Dots — centred at very bottom */
     .feat-dots {
@@ -858,7 +1007,6 @@
             <rect x="20" y="30" width="22" height="110" fill="#42403e" rx="4"/>
             <!-- Right post -->
             <rect x="318" y="30" width="22" height="110" fill="#42403e" rx="4"/>
-
             <!-- Motor unit -->
             <rect x="244" y="52" width="60" height="32" fill="#42403e" stroke="#C8C3BA" stroke-width="1" rx="6"/>
             <circle cx="274" cy="68" r="8" fill="#B8860B" opacity=".7"/>
@@ -1043,6 +1191,13 @@
           <h3>Advanced Security</h3>
           <p>128-bit encrypted communication, tamper alerts, and anti-lift protection ensure your gate cannot be bypassed by any external attempt.</p>
         </div>
+        <div class="feat-visual">
+          <div class="fv-icon">
+            <svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/><circle cx="12" cy="16" r="1.5" fill="currentColor"/></svg>
+          </div>
+          <div class="fv-label">Security Shield</div>
+          <div class="fv-tag">128-bit Encrypted</div>
+        </div>
       </div>
       <div class="feat-item">
         <div class="feat-content">
@@ -1050,12 +1205,26 @@
           <h3>Mobile App Control</h3>
           <p>Open, close, and monitor your gate from anywhere in the world via the Walgi app — available on iOS and Android with instant notifications.</p>
         </div>
+        <div class="feat-visual">
+          <div class="fv-icon">
+            <svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18" stroke-linecap="round" stroke-width="2.5"/></svg>
+          </div>
+          <div class="fv-label">Remote Control</div>
+          <div class="fv-tag">iOS &amp; Android</div>
+        </div>
       </div>
       <div class="feat-item">
         <div class="feat-content">
           <div class="feat-num-label">03 / 06</div>
-          <h3>GPS Auto-Open</h3>
-          <p>Geo-fencing technology detects when your phone approaches — the gate opens automatically and silently the moment you arrive home.</p>
+          <h3>RFID Access</h3>
+          <p>Contactless RFID card and fob entry lets authorised users open the gate instantly — no phone, no PIN, just a tap on the reader.</p>
+        </div>
+        <div class="feat-visual">
+          <div class="fv-icon">
+            <svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M16 9a3 3 0 0 1 0 6"/><path d="M19.5 7.5a7 7 0 0 1 0 9"/><line x1="2" y1="10" x2="7" y2="10"/><line x1="2" y1="14" x2="7" y2="14"/></svg>
+          </div>
+          <div class="fv-label">RFID Reader</div>
+          <div class="fv-tag">Contactless Entry</div>
         </div>
       </div>
       <div class="feat-item">
@@ -1064,12 +1233,26 @@
           <h3>Solar Ready</h3>
           <p>Optional solar panel integration keeps your gate powered even during extended outages — complete zero grid dependency for uninterrupted access.</p>
         </div>
+        <div class="feat-visual">
+          <div class="fv-icon">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+          </div>
+          <div class="fv-label">Solar Power</div>
+          <div class="fv-tag">Zero Grid Dependency</div>
+        </div>
       </div>
       <div class="feat-item">
         <div class="feat-content">
           <div class="feat-num-label">05 / 06</div>
           <h3>Activity Log</h3>
           <p>Full timestamped history of every open and close event — accessible via the app or web dashboard at any time, from anywhere.</p>
+        </div>
+        <div class="feat-visual">
+          <div class="fv-icon">
+            <svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          </div>
+          <div class="fv-label">Event History</div>
+          <div class="fv-tag">Real-time Dashboard</div>
         </div>
       </div>
       <div class="feat-item">
@@ -1078,6 +1261,13 @@
           <h3>Multi-User Access</h3>
           <p>Grant time-limited or permanent access to family, staff, or visitors — each with their own individual PIN codes or unique app credentials.</p>
           <button class="feat-btn">Learn More</button>
+        </div>
+        <div class="feat-visual">
+          <div class="fv-icon">
+            <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <div class="fv-label">User Profiles</div>
+          <div class="fv-tag">Unlimited Members</div>
         </div>
       </div>
     </div>
@@ -1098,8 +1288,8 @@
       </div>
       <div class="fc-spoke" style="--i:2">
         <div class="fc-icon-card">
-          <svg viewBox="0 0 24 24"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/></svg>
-          <span>GPS Auto-Open</span>
+          <svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M16 9a3 3 0 0 1 0 6"/><path d="M19.5 7.5a7 7 0 0 1 0 9"/><line x1="2" y1="10" x2="7" y2="10"/><line x1="2" y1="14" x2="7" y2="14"/></svg>
+          <span>RFID Access</span>
         </div>
       </div>
       <div class="fc-spoke" style="--i:3">
@@ -1309,15 +1499,43 @@
       if (top !== -1) spokes[top].classList.add('fc-active');
     }
 
+    let isAnimating = false;
+
     function goTo(idx, dir) {
-      items[active].classList.remove('active');
+      if (isAnimating) return;
+      isAnimating = true;
+
+      const outgoing = items[active];
       dotsEl.children[active].classList.remove('active');
+
+      // Mark direction on outgoing for exit animation
+      if (dir === -1) outgoing.classList.add('dir-prev');
+      else outgoing.classList.remove('dir-prev');
+
+      // Start exit animation
+      outgoing.classList.add('is-exiting');
+      outgoing.classList.remove('active');
+
+      // Advance state
       active = (idx + total) % total;
       rotate += dir * -60;
       applyRotation();
-      items[active].classList.add('active');
-      dotsEl.children[active].classList.add('active');
-      updateActiveSpoke();
+
+      const incoming = items[active];
+      if (dir === -1) incoming.classList.add('dir-prev');
+      else incoming.classList.remove('dir-prev');
+
+      requestAnimationFrame(() => {
+        incoming.classList.add('active', 'is-entering');
+        dotsEl.children[active].classList.add('active');
+        updateActiveSpoke();
+      });
+
+      setTimeout(() => {
+        outgoing.classList.remove('is-exiting', 'dir-prev');
+        incoming.classList.remove('is-entering');
+        isAnimating = false;
+      }, 1400);
     }
 
     /* ── build dots ── */
@@ -1325,7 +1543,7 @@
       const d = document.createElement('button');
       d.className = 'feat-dot' + (i === 0 ? ' active' : '');
       d.setAttribute('aria-label', 'Go to feature ' + (i + 1));
-      d.addEventListener('click', () => goTo(i, i > active ? 1 : -1));
+      d.addEventListener('click', () => { const cur = active; goTo(i, i > cur ? 1 : -1); });
       dotsEl.appendChild(d);
     });
 
@@ -1364,13 +1582,73 @@
     document.getElementById('featPrev').addEventListener('click', () => goTo(active - 1, -1));
     document.getElementById('featNext').addEventListener('click', () => goTo(active + 1, 1));
 
-    /* ── DESKTOP touch / swipe ── */
-    let tx = 0;
+    /* ── SWIPE: vertical finger-tracking drag with snap on release ── */
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let isDragging = false;
+    let dragLocked = false;
     const slider = document.querySelector('.feat-slider');
-    slider.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
+    const DRAG_THRESHOLD = 6;
+    const SNAP_THRESHOLD = 80;
+    const MAX_DRAG = 160;
+
+    function setDragOffset(offset) {
+      const clamped = Math.sign(offset) * Math.min(Math.abs(offset), MAX_DRAG);
+      items[active].style.transform = `translateY(${clamped}px)`;
+      const neighbourIdx = offset < 0
+        ? (active + 1) % total
+        : (active - 1 + total) % total;
+      const neighbourOffset = offset < 0
+        ? clamped + items[active].offsetHeight
+        : clamped - items[active].offsetHeight;
+      items[neighbourIdx].style.opacity = '1';
+      items[neighbourIdx].style.transform = `translateY(${neighbourOffset}px)`;
+    }
+
+    function resetDragStyles() {
+      items.forEach(el => {
+        el.style.transform = '';
+        el.style.opacity  = '';
+      });
+    }
+
+    slider.addEventListener('touchstart', e => {
+      if (isAnimating) return;
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+      isDragging  = false;
+      dragLocked  = false;
+    }, { passive: true });
+
+    slider.addEventListener('touchmove', e => {
+      if (isAnimating) return;
+      const dx = e.touches[0].clientX - touchStartX;
+      const dy = e.touches[0].clientY - touchStartY;
+
+      if (!dragLocked) {
+        if (Math.abs(dx) < DRAG_THRESHOLD && Math.abs(dy) < DRAG_THRESHOLD) return;
+        if (Math.abs(dx) > Math.abs(dy)) { isDragging = false; return; } /* horizontal scroll */
+        dragLocked = true;
+        isDragging = true;
+      }
+
+      if (!isDragging) return;
+      e.preventDefault();
+      setDragOffset(dy);
+    }, { passive: false });
+
     slider.addEventListener('touchend', e => {
-      const dx = e.changedTouches[0].clientX - tx;
-      if (Math.abs(dx) > 50) goTo(active + (dx < 0 ? 1 : -1), dx < 0 ? 1 : -1);
+      if (!isDragging) return;
+      isDragging = false;
+      dragLocked = false;
+
+      const dy = e.changedTouches[0].clientY - touchStartY;
+      resetDragStyles();
+
+      if (Math.abs(dy) >= SNAP_THRESHOLD) {
+        const dir = dy < 0 ? 1 : -1;
+        goTo(active + dir, dir);
+      }
     }, { passive: true });
 
     /* ── MOBILE: re-apply rotation on resize so circle stays correct ── */
